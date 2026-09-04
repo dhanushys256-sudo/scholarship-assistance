@@ -8,11 +8,11 @@
   // Chatbot Knowledge Base
   const BOT_RESPONSES = [
     {
-      keywords: ['hello', 'hi', 'hey', 'start', 'help'],
+      keywords: ['hello', 'hi', 'hey', 'start', 'help', 'namaste', 'namaskara', 'vanakkam', 'namaskaram', 'nomoshkar'],
       reply: "Hello! 👋 I'm **ScholarBot**, your 24/7 scholarship guide. How can I assist you today? You can ask about eligibility, application deadlines, required documents, or tracking your support ticket."
     },
     {
-      keywords: ['eligible', 'eligibility', 'criteria', 'qualify'],
+      keywords: ['eligible', 'eligibility', 'criteria', 'qualify', 'arhate', 'yogyata', 'thoguthi', 'patrata'],
       reply: "To check which scholarships you qualify for, you can try our interactive [Eligibility Checker](eligibility.html)! Most government schemes require 60%–80% marks in Class 12 and family income below ₹4.5L–₹6L per year."
     },
     {
