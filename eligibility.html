@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eligibility Checker — ScholarBridge</title>
+  <meta name="description" content="Answer a few questions and find out which scholarships you're eligible for — personalized just for you." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--surface-2); }
+
+    .quiz-page { padding: calc(var(--nav-height) + 40px) 0 80px; }
+
+    .quiz-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Progress */
+    .quiz-progress {
+      margin-bottom: 36px;
+    }
+    .quiz-progress-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .quiz-progress-header span { font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+    .quiz-progress-header .step-counter { color: var(--primary); font-weight: 800; }
+
+    /* Question Card */
+    .question-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-light);
+      animation: questionIn 0.4s ease;
+    }
+
+    @keyframes questionIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .question-emoji { font-size: 2.8rem; margin-bottom: 16px; }
+    .question-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+    .question-sub   { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 28px; }
+
+    /* Options */
+    .options-grid { display: grid; gap: 12px; }
+    .options-grid.two-col { grid-template-columns: 1fr 1fr; }
+
+    .option-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px;
+      border: 2px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      background: white;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      text-align: left;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      width: 100%;
+    }
+    .option-btn:hover { border-color: var(--primary); background: rgba(255,107,0,0.04); }
+    .option-btn.selected { border-color: var(--primary); background: rgba(255,107,0,0.08); color: var(--primary); }
+    .option-btn .opt-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .option-btn .opt-check { margin-left: auto; width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-light); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast); }
+    .option-btn.selected .opt-check { background: var(--primary); border-color: var(--primary); color: white; font-size: 0.65rem; }
+
+    /* Nav Buttons */
+    .quiz-nav {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 28px;
+    }
+
+    /* Results */
+    .results-section { animation: questionIn 0.5s ease; }
+    .results-header {
+      background: var(--gradient-dark);
+      border-radius: var(--radius-lg);
+      padding: 36px 40px;
+      color: white;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .results-header h2 { color: white; margin-bottom: 8px; }
+    .results-header p  { color: rgba(255,255,255,0.7); }
+    .results-score { font-size: 4rem; font-weight: 900; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 12px 0; }
+
+    .result-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 24px;
+      border: 1px solid var(--border-light);
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 16px;
+      transition: var(--transition);
+    }
+    .result-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); border-color: var(--primary); }
+    .result-card .match-score { padding: 6px 14px; background: rgba(34,197,94,0.12); color: #15803D; border-radius: 50px; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
+
+    @media (max-width: 600px) {
+      .question-card { padding: 28px 24px; }
+      .options-grid.two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+<div class="toast-container"></div>
+
+<!-- Navbar -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">🎓</div>Scholar<span>Bridge</span></a>
+    <ul class="navbar-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="scholarships.html">Scholarships</a></li>
+      <li><a href="eligibility.html" class="active">Eligibility</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="navLoginBtn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="dashboard.html" class="btn btn-outline btn-sm" id="navDashBtn" style="display:none;">Dashboard</a>
+      <button class="btn btn-ghost btn-sm" id="navLogoutBtn" style="display:none;" onclick="logout()">Logout</button>
+    </div>
+    <button class="nav-mobile-btn" id="navMobileBtn">☰</button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="scholarships.html">🏅 Scholarships</a>
+  <a href="eligibility.html">✅ Eligibility</a>
+  <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+</div>
+
+<div class="quiz-page">
+  <div class="container">
+    <div class="quiz-container">
+
+      <!-- Header -->
+      <div class="text-center" style="margin-bottom:36px;">
+        <div class="tag" style="display:inline-block;background:var(--surface-3);color:var(--primary);font-size:0.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 16px;border-radius:50px;margin-bottom:14px;border:1px solid var(--border);">✅ Eligibility Checker</div>
+        <h1 style="font-size:2rem;margin-bottom:10px;">Find Your Matching Scholarships</h1>
+        <p style="color:var(--text-muted);">Answer 8 simple questions and get a personalized list of scholarships you qualify for.</p>
+      </div>
+
+      <!-- Quiz Body -->
+      <div id="quizBody">
+
+        <!-- Progress -->
+        <div class="quiz-progress" id="quizProgress">
+          <div class="quiz-progress-header">
+            <span>Question <span class="step-counter" id="stepCounter">1</span> of 8</span>
+            <span id="progressPercent">12% complete</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width:12.5%;"></div>
+          </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="question-card" id="questionCard"></div>
+
+        <!-- Navigation -->
+        <div class="quiz-nav">
+          <button class="btn btn-ghost" id="prevBtn" onclick="prevQuestion()" style="display:none;">← Previous</button>
+          <div></div>
+          <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Next →</button>
+        </div>
+      </div>
+
+      <!-- Results (hidden initially) -->
+      <div id="resultsSection" class="results-section" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+const questions = [
+  {
+    id: 'level',
+    emoji: '📚',
+    title: 'What is your current education level?',
+    sub: 'Select the level at which you are currently studying.',
+    options: [
+      { icon: '🏫', label: 'School (Class 8–12)', value: 'school' },
+      { icon: '🎓', label: 'Undergraduate (UG)', value: 'undergraduate' },
+      { icon: '📖', label: 'Postgraduate (PG)', value: 'postgraduate' },
+      { icon: '🔬', label: 'PhD / Research', value: 'phd' }
+    ]
+  },
+  {
+    id: 'gender',
+    emoji: '👤',
+    title: 'What is your gender?',
+    sub: 'Some scholarships are specifically for women students.',
+    options: [
+      { icon: '👦', label: 'Male', value: 'male' },
+      { icon: '👧', label: 'Female', value: 'female' },
+      { icon: '🌈', label: 'Other / Prefer not to say', value: 'other' }
+    ],
+    cols: 3
+  },
+  {
+    id: 'category',
+    emoji: '📋',
+    title: 'What is your caste / reservation category?',
+    sub: 'Many scholarships are reserved for specific categories.',
+    options: [
+      { icon: '⚪', label: 'General / EWS', value: 'general' },
+      { icon: '🟡', label: 'OBC', value: 'obc' },
+      { icon: '🔵', label: 'SC (Scheduled Caste)', value: 'sc' },
+      { icon: '🟢', label: 'ST (Scheduled Tribe)', value: 'st' }
+    ],
+    cols: 2
+  },
+  {
+    id: 'income',
+    emoji: '💰',
+    title: 'What is your family\'s annual income?',
+    sub: 'Most need-based scholarships have income limits.',
+    options: [
+      { icon: '💵', label: 'Below ₹1 LPA', value: 'below_1' },
+      { icon: '💵', label: '₹1 – 2.5 LPA', value: '1_25' },
+      { icon: '💵', label: '₹2.5 – 6 LPA', value: '25_6' },
+      { icon: '💵', label: 'Above ₹6 LPA', value: 'above_6' }
+    ],
+    cols: 2
+  },
+  {
+    id: 'percentage',
+    emoji: '📊',
+    title: 'What was your last exam percentage / CGPA?',
+    sub: 'Merit-based scholarships require a minimum percentage.',
+    options: [
+      { icon: '⭐', label: 'Above 90%', value: 'above_90' },
+      { icon: '🌟', label: '80% – 90%', value: '80_90' },
+      { icon: '✨', label: '70% – 80%', value: '70_80' },
+      { icon: '📈', label: 'Below 70%', value: 'below_70' }
+    ],
+    cols: 2
+  },
+  {
+    id: 'stream',
+    emoji: '🎯',
+    title: 'Which stream / field are you studying?',
+    sub: 'Some scholarships target specific academic disciplines.',
+    options: [
+      { icon: '🔬', label: 'Science / Technology', value: 'science' },
+      { icon: '🏗️', label: 'Engineering / Tech (B.Tech)', value: 'engineering' },
+      { icon: '⚕️', label: 'Medical / Health Sciences', value: 'medical' },
+      { icon: '📈', label: 'Commerce / Management', value: 'commerce' },
+      { icon: '📜', label: 'Arts / Humanities', value: 'arts' },
+      { icon: '⚖️', label: 'Law', value: 'law' }
+    ]
+  },
+  {
+    id: 'state',
+    emoji: '🗺️',
+    title: 'Which region are you from?',
+    sub: 'Regional scholarships are available for specific states.',
+    options: [
+      { icon: '🌄', label: 'North-East India', value: 'northeast' },
+      { icon: '🏔️', label: 'J&K / Ladakh / Himachal', value: 'north' },
+      { icon: '🌾', label: 'Central India (MP, CG, UP)', value: 'central' },
+      { icon: '🌊', label: 'South India', value: 'south' },
+      { icon: '🏙️', label: 'West India', value: 'west' },
+      { icon: '🌿', label: 'East India', value: 'east' }
+    ]
+  },
+  {
+    id: 'disability',
+    emoji: '♿',
+    title: 'Do you have any disability?',
+    sub: 'Special scholarships exist for differently-abled students.',
+    options: [
+      { icon: '✅', label: 'Yes, I have a disability certificate', value: 'yes' },
+      { icon: '❌', label: 'No', value: 'no' }
+    ],
+    cols: 2
+  }
+];
+
+let currentQ = 0;
+let answers  = {};
+
+function renderQuestion(index) {
+  const q = questions[index];
+  const card = document.getElementById('questionCard');
+
+  const colsClass = q.cols === 2 ? 'two-col' : q.cols === 3 ? 'two-col' : '';
+  const gridStyle = q.cols === 3 ? 'grid-template-columns:repeat(3,1fr)' : '';
+
+  card.innerHTML = `
+    <div class="question-emoji">${q.emoji}</div>
+    <div class="question-title">${q.title}</div>
+    <div class="question-sub">${q.sub}</div>
+    <div class="options-grid ${colsClass}" style="${gridStyle}">
+      ${q.options.map(opt => `
+        <button class="option-btn ${answers[q.id] === opt.value ? 'selected' : ''}"
+                onclick="selectOption('${q.id}', '${opt.value}', this)">
+          <span class="opt-icon">${opt.icon}</span>
+          <span>${opt.label}</span>
+          <span class="opt-check">${answers[q.id] === opt.value ? '✓' : ''}</span>
+        </button>`).join('')}
+    </div>`;
+
+  // Progress
+  const step = index + 1;
+  const pct  = Math.round((step / questions.length) * 100);
+  document.getElementById('stepCounter').textContent = step;
+  document.getElementById('progressPercent').textContent = `${pct}% complete`;
+  document.getElementById('progressFill').style.width = `${pct}%`;
+
+  // Buttons
+  document.getElementById('prevBtn').style.display = index > 0 ? 'inline-flex' : 'none';
+  document.getElementById('nextBtn').textContent = index === questions.length - 1 ? 'Get Results 🎯' : 'Next →';
+}
+
+function selectOption(qId, val, btn) {
+  answers[qId] = val;
+  btn.closest('.options-grid').querySelectorAll('.option-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.querySelector('.opt-check').textContent = '';
+  });
+  btn.classList.add('selected');
+  btn.querySelector('.opt-check').textContent = '✓';
+
+  // Auto-advance after short delay
+  if (currentQ < questions.length - 1) {
+    setTimeout(() => nextQuestion(), 500);
+  }
+}
+
+function nextQuestion() {
+  if (!answers[questions[currentQ].id]) {
+    showToast('Please select an option to continue', 'warning');
+    return;
+  }
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    renderQuestion(currentQ);
+  } else {
+    showResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion(currentQ);
+  }
+}
+
+function showResults() {
+  document.getElementById('quizBody').style.display = 'none';
+  const results = document.getElementById('resultsSection');
+  results.style.display = 'block';
+
+  // Match scholarships based on answers
+  let matched = AppState.scholarships.filter(s => {
+    const levelMatch = !answers.level || s.level.includes(answers.level);
+    const genderMatch = answers.gender !== 'female' || s.category === 'Girls' || s.category !== 'Girls';
+    return levelMatch && genderMatch;
+  });
+
+  const matchScores = {
+    above_90: 100, '80_90': 90, '70_80': 75, below_70: 60
+  };
+  const matchPct = matchScores[answers.percentage] || 80;
+
+  results.innerHTML = `
+    <div class="results-header">
+      <div style="font-size:1.5rem;margin-bottom:6px;">🎉 Results Ready!</div>
+      <div class="results-score">${matched.length}</div>
+      <h2>Scholarships Match Your Profile</h2>
+      <p>Based on your answers, here are the scholarships you're most likely to qualify for.</p>
+    </div>
+
+    <div style="margin-bottom:24px;">
+      <h3 style="margin-bottom:16px;">✅ Your Matching Scholarships</h3>
+      ${matched.map((s, i) => `
+      <div class="result-card fade-in" style="transition-delay:${i * 0.08}s;">
+        <div style="font-size:1.8rem;width:50px;height:50px;border-radius:14px;background:${s.orgColor}22;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${s.orgEmoji}</div>
+        <div style="flex:1;">
+          <div style="font-weight:700;margin-bottom:4px;">${s.title}</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:6px;">${s.organization}</div>
+          <div style="font-weight:800;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">${s.amountDisplay}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;">
+          <span class="match-score">~${Math.min(matchPct + Math.floor(Math.random() * 15), 98)}% match</span>
+          <button class="btn btn-primary btn-sm" onclick="applyScholarship('${s.id}')">Apply →</button>
+        </div>
+      </div>`).join('')}
+    </div>
+
+    <div style="text-align:center;padding:28px;background:white;border-radius:var(--radius-md);border:1px solid var(--border-light);">
+      <p style="margin-bottom:16px;">Want to explore even more options?</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="scholarships.html" class="btn btn-primary">Browse All Scholarships</a>
+        <button class="btn btn-outline" onclick="restartQuiz()">Retake Quiz</button>
+      </div>
+    </div>`;
+
+  initScrollAnimations();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  currentQ = 0;
+  answers = {};
+  document.getElementById('resultsSection').style.display = 'none';
+  document.getElementById('quizBody').style.display = 'block';
+  renderQuestion(0);
+}
+
+// Init
+renderQuestion(0);
+</script>
+</body>
+</html>

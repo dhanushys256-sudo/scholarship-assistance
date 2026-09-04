@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ & Guidance — ScholarBridge</title>
+  <meta name="description" content="Get answers to all your questions about scholarship applications, eligibility, documents, and the ScholarBridge platform." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .faq-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 40px;
+      padding: 56px 0;
+    }
+
+    .faq-nav {
+      position: sticky;
+      top: calc(var(--nav-height) + 20px);
+      align-self: start;
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+
+    .faq-nav-header { padding: 16px 20px; background: var(--surface-2); border-bottom: 1px solid var(--border-light); font-weight: 700; font-size: 0.88rem; }
+
+    .faq-nav-links { padding: 12px; }
+    .faq-nav-links a {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; border-radius: var(--radius-sm);
+      font-size: 0.85rem; font-weight: 500; color: var(--text-secondary);
+      transition: var(--transition-fast);
+      margin-bottom: 2px;
+    }
+    .faq-nav-links a:hover, .faq-nav-links a.active { color: var(--primary); background: var(--surface-3); }
+
+    .faq-section { margin-bottom: 48px; }
+    .faq-section-title {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; padding-bottom: 14px;
+      border-bottom: 2px solid var(--border-light);
+    }
+    .faq-section-title h3 { font-size: 1.1rem; }
+    .faq-section-title .icon { font-size: 1.3rem; }
+
+    /* Steps Guide */
+    .guide-card {
+      background: var(--gradient-dark);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      color: white;
+      margin-bottom: 40px;
+    }
+    .guide-card h3 { color: white; margin-bottom: 8px; }
+    .guide-card p  { color: rgba(255,255,255,0.7); margin-bottom: 28px; }
+    .guide-steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .guide-step {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+    }
+    .guide-step .g-num { width: 32px; height: 32px; border-radius: 50%; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: white; margin: 0 auto 10px; }
+    .guide-step .g-icon { font-size: 1.5rem; margin-bottom: 6px; }
+    .guide-step h5 { color: white; font-size: 0.85rem; margin-bottom: 4px; }
+    .guide-step p  { color: rgba(255,255,255,0.6); font-size: 0.75rem; }
+
+    /* Document checklist */
+    .doc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .doc-item { display: flex; align-items: center; gap: 10px; padding: 14px; background: white; border-radius: var(--radius-sm); border: 1px solid var(--border-light); font-size: 0.85rem; font-weight: 500; }
+    .doc-item .doc-icon { font-size: 1.2rem; }
+
+    @media (max-width: 1024px) {
+      .faq-layout { grid-template-columns: 1fr; }
+      .faq-nav { position: static; }
+      .guide-steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .doc-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .guide-steps-grid { grid-template-columns: 1fr 1fr; }
+      .doc-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+<div class="toast-container"></div>
+
+<!-- Navbar -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">🎓</div>Scholar<span>Bridge</span></a>
+    <ul class="navbar-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="scholarships.html">Scholarships</a></li>
+      <li><a href="eligibility.html">Eligibility</a></li>
+      <li><a href="faq.html" class="active">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="navLoginBtn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="dashboard.html" class="btn btn-outline btn-sm" id="navDashBtn" style="display:none;">Dashboard</a>
+      <button class="btn btn-ghost btn-sm" id="navLogoutBtn" style="display:none;" onclick="logout()">Logout</button>
+    </div>
+    <button class="nav-mobile-btn" id="navMobileBtn">☰</button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="scholarships.html">🏅 Scholarships</a>
+  <a href="faq.html">❓ FAQ</a>
+  <a href="contact.html">📞 Contact</a>
+  <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+</div>
+
+<!-- Hero -->
+<div class="page-hero">
+  <div class="container">
+    <h1>FAQ & Scholarship Guide ❓</h1>
+    <p>Everything you need to know about scholarships — from eligibility to application and beyond.</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="faq-layout">
+
+    <!-- Sidebar Nav -->
+    <div class="faq-nav">
+      <div class="faq-nav-header">📚 Quick Links</div>
+      <div class="faq-nav-links">
+        <a href="#guide" class="active">📋 Step-by-Step Guide</a>
+        <a href="#documents">📄 Documents Needed</a>
+        <a href="#eligibility-faq">✅ Eligibility</a>
+        <a href="#application-faq">📝 Application Process</a>
+        <a href="#payment-faq">💰 Payment & Renewal</a>
+        <a href="#tech-faq">💻 Technical Help</a>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div>
+
+      <!-- Guide -->
+      <div id="guide" class="guide-card fade-in">
+        <h3>📋 How to Apply for a Scholarship — Step by Step</h3>
+        <p>Follow these 4 simple steps to successfully apply for any scholarship on ScholarBridge.</p>
+        <div class="guide-steps-grid">
+          <div class="guide-step">
+            <div class="g-num">1</div>
+            <div class="g-icon">📝</div>
+            <h5>Register</h5>
+            <p>Create your free account with basic details</p>
+          </div>
+          <div class="guide-step">
+            <div class="g-num">2</div>
+            <div class="g-icon">👤</div>
+            <h5>Complete Profile</h5>
+            <p>Add academic info and upload documents</p>
+          </div>
+          <div class="guide-step">
+            <div class="g-num">3</div>
+            <div class="g-icon">🔍</div>
+            <h5>Find & Apply</h5>
+            <p>Search scholarships and submit applications</p>
+          </div>
+          <div class="guide-step">
+            <div class="g-num">4</div>
+            <div class="g-icon">📊</div>
+            <h5>Track Status</h5>
+            <p>Monitor your applications from the dashboard</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents -->
+      <div class="faq-section fade-in" id="documents">
+        <div class="faq-section-title">
+          <span class="icon">📄</span>
+          <h3>Documents You'll Typically Need</h3>
+        </div>
+        <div class="doc-grid">
+          <div class="doc-item"><span class="doc-icon">🎓</span> Marksheet / Grade Card</div>
+          <div class="doc-item"><span class="doc-icon">💳</span> Aadhaar Card</div>
+          <div class="doc-item"><span class="doc-icon">📊</span> Income Certificate</div>
+          <div class="doc-item"><span class="doc-icon">🏘️</span> Domicile Certificate</div>
+          <div class="doc-item"><span class="doc-icon">🏷️</span> Caste Certificate (if applicable)</div>
+          <div class="doc-item"><span class="doc-icon">🏦</span> Bank Passbook / Account</div>
+          <div class="doc-item"><span class="doc-icon">🖼️</span> Passport Size Photo</div>
+          <div class="doc-item"><span class="doc-icon">📜</span> Bonafide Certificate</div>
+          <div class="doc-item"><span class="doc-icon">🧾</span> Fee Receipt (current year)</div>
+        </div>
+        <div class="alert alert-info" style="margin-top:16px;">
+          ℹ️ Document requirements vary by scholarship. Always check the specific scholarship's eligibility page before applying.
+        </div>
+      </div>
+
+      <!-- Eligibility FAQ -->
+      <div class="faq-section fade-in" id="eligibility-faq">
+        <div class="faq-section-title">
+          <span class="icon">✅</span>
+          <h3>Eligibility Questions</h3>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Who can apply for scholarships on ScholarBridge? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Any Indian student studying from Class 8 to PhD level can register and apply. We have scholarships for students from all categories — General, OBC, SC, ST — and special scholarships for girls, students with disabilities, and students from economically weaker sections.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is there an income limit to apply? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Income limits vary by scholarship. Most government scholarships have income criteria ranging from ₹1 LPA to ₹8 LPA. Some merit-based scholarships have no income limit. Use our Eligibility Checker to find scholarships that match your family income.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I apply for multiple scholarships at once? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Yes! You can apply for multiple scholarships simultaneously. However, some government schemes may not allow you to hold multiple government scholarships at the same time. Private scholarships generally don't have this restriction.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">What is the minimum percentage required? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>The minimum percentage varies: Merit-based scholarships typically require 75–85%. Need-based scholarships may only require a passing grade. Some like INSPIRE require top 1% in board exams. Check each scholarship's specific criteria.</p></div>
+        </div>
+      </div>
+
+      <!-- Application FAQ -->
+      <div class="faq-section fade-in" id="application-faq">
+        <div class="faq-section-title">
+          <span class="icon">📝</span>
+          <h3>Application Process</h3>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How do I track my application status? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Log in to your ScholarBridge account and visit the Dashboard. Under "My Applications," you can see the real-time status of each application: Pending → Under Review → Approved or Rejected. You'll also receive notifications for status updates.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I edit my application after submission? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>You cannot edit a submitted application for most scholarships. If you need to make corrections, contact our support team immediately via the Contact page. If the scholarship is still in "Pending" status, we may be able to assist.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">What file formats are accepted for document upload? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>We accept PDF, JPG, and PNG files. Each file must be under 5MB. Make sure documents are clearly scanned/photographed and all text is legible. Low-quality documents may lead to application rejection.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How long does the approval process take? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Processing times vary: Government scholarships typically take 2–3 months. Private scholarships may take 3–6 weeks. You can track your status in the Dashboard. Contact support if there's no update for more than 90 days.</p></div>
+        </div>
+      </div>
+
+      <!-- Payment FAQ -->
+      <div class="faq-section fade-in" id="payment-faq">
+        <div class="faq-section-title">
+          <span class="icon">💰</span>
+          <h3>Payment & Renewal</h3>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How is the scholarship amount disbursed? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Most scholarships are disbursed directly to your registered bank account via Direct Benefit Transfer (DBT). Some are paid to your educational institution directly. Always ensure your bank account is linked to your Aadhaar.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Do I need to renew my scholarship every year? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Yes, most multi-year scholarships require annual renewal. You need to submit proof of enrollment, updated marksheets, and confirm your income details each year. We'll send you renewal reminders 60 days before the deadline.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is ScholarBridge free to use? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Absolutely! ScholarBridge is 100% free for students. We charge no registration fees, no application fees, and no commission. Our mission is to ensure every deserving student gets access to financial support for education.</p></div>
+        </div>
+      </div>
+
+      <!-- Technical FAQ -->
+      <div class="faq-section fade-in" id="tech-faq">
+        <div class="faq-section-title">
+          <span class="icon">💻</span>
+          <h3>Technical Help</h3>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">I forgot my password. How do I reset it? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Click on "Forgot Password" on the login page and enter your registered email address. You'll receive a password reset link within a few minutes. If you don't receive it, check your spam folder or contact our support team.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">The website is slow or not loading. What should I do? <span class="faq-icon">+</span></div>
+          <div class="faq-answer"><p>Try refreshing the page (Ctrl+R / Cmd+R), clearing your browser cache, or using a different browser (Chrome or Firefox recommended). If problems persist, check our status page or contact support.</p></div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="card" style="padding:36px;text-align:center;background:var(--surface-3);border:1px solid var(--border);" id="contact-cta">
+        <div style="font-size:2.5rem;margin-bottom:12px;">🙋</div>
+        <h3 style="margin-bottom:8px;">Still have questions?</h3>
+        <p style="margin-bottom:20px;">Our support team is available Monday–Saturday, 9AM–6PM IST.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="contact.html" class="btn btn-primary">Contact Support</a>
+          <a href="eligibility.html" class="btn btn-outline">Check Eligibility</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer" style="margin-top:0;">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <p>© 2026 ScholarBridge — Scholarship Assistance Community Project</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+  // Highlight active sidebar link on scroll
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.faq-nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === `#${current}`);
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>

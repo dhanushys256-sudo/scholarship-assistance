@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apply for Scholarship — ScholarBridge</title>
+  <meta name="description" content="Apply for scholarships online with ScholarBridge. Fill the application form and upload your documents." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--surface-2); }
+    .apply-page { padding: calc(var(--nav-height) + 32px) 0 80px; }
+
+    .apply-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* Steps Header */
+    .apply-steps {
+      display: flex;
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 24px 28px;
+      border: 1px solid var(--border-light);
+      margin-bottom: 24px;
+      gap: 0;
+    }
+
+    .apply-step {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+
+    .apply-step::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 60px;
+      height: 2px;
+      background: var(--border-light);
+    }
+
+    .apply-step:last-child::after { display: none; }
+    .apply-step.done::after { background: var(--primary); }
+
+    .apply-step .step-ball {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--border-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.82rem; font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: var(--transition);
+    }
+
+    .apply-step.active .step-ball { border-color: var(--primary); background: rgba(255,107,0,0.1); color: var(--primary); }
+    .apply-step.done .step-ball   { border-color: var(--primary); background: var(--primary); color: white; }
+    .apply-step .step-label { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+    .apply-step.active .step-label { color: var(--primary); }
+    .apply-step.done .step-label   { color: var(--text-secondary); }
+
+    /* Form Card */
+    .apply-form-card {
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+
+    .apply-form-card .form-section-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border-light);
+      background: var(--surface-2);
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .apply-form-card .form-section-header h4 { font-size: 1rem; }
+    .apply-form-card .form-body { padding: 28px; }
+
+    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Sidebar Summary */
+    .apply-summary {
+      position: sticky;
+      top: calc(var(--nav-height) + 20px);
+    }
+
+    .summary-card {
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+
+    .summary-header {
+      background: var(--gradient-dark);
+      padding: 24px;
+      color: white;
+    }
+
+    .summary-header h4 { color: white; margin-bottom: 12px; font-size: 1rem; }
+    .summary-amount { font-size: 2rem; font-weight: 900; background: linear-gradient(135deg, var(--gold-light), white); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 4px; }
+    .summary-org { color: rgba(255,255,255,0.65); font-size: 0.82rem; }
+
+    .summary-body { padding: 20px; }
+    .summary-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--border-light); font-size: 0.85rem; }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .row-key { color: var(--text-muted); font-weight: 500; }
+    .summary-row .row-val { font-weight: 600; text-align: right; max-width: 55%; }
+
+    /* Success */
+    .apply-success { text-align: center; padding: 60px 40px; display: none; }
+    .apply-success .success-anim { font-size: 5rem; margin-bottom: 20px; animation: successPop 0.5s ease; }
+    @keyframes successPop { from { transform: scale(0); } to { transform: scale(1); } }
+    .apply-success h2 { margin-bottom: 10px; }
+    .apply-success .ref-id { background: var(--surface-3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 20px; display: inline-block; margin: 16px 0; font-size: 1.2rem; font-weight: 800; color: var(--primary); }
+
+    @media (max-width: 1024px) {
+      .apply-layout { grid-template-columns: 1fr; }
+      .apply-summary { position: static; }
+    }
+    @media (max-width: 600px) {
+      .form-2col { grid-template-columns: 1fr; }
+      .apply-steps { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+<div class="toast-container"></div>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">🎓</div>Scholar<span>Bridge</span></a>
+    <div class="navbar-actions">
+      <a href="dashboard.html" class="btn btn-ghost btn-sm">← Back to Dashboard</a>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+    </div>
+    <button class="nav-mobile-btn" id="navMobileBtn">☰</button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="dashboard.html">📊 Dashboard</a>
+  <a href="scholarships.html">🏅 Scholarships</a>
+</div>
+
+<div class="apply-page">
+  <div class="container">
+    <!-- Page Title -->
+    <div style="margin-bottom:24px;">
+      <h2 id="applyPageTitle">Apply for Scholarship</h2>
+      <p id="applyPageOrg" style="color:var(--text-muted);">Fill all sections accurately. Incorrect information may lead to disqualification.</p>
+    </div>
+
+    <!-- Steps -->
+    <div class="apply-steps" id="applySteps">
+      <div class="apply-step active" data-step="1">
+        <div class="step-ball">1</div>
+        <div class="step-label">Personal Info</div>
+      </div>
+      <div class="apply-step" data-step="2">
+        <div class="step-ball">2</div>
+        <div class="step-label">Academic Details</div>
+      </div>
+      <div class="apply-step" data-step="3">
+        <div class="step-ball">3</div>
+        <div class="step-label">Documents</div>
+      </div>
+      <div class="apply-step" data-step="4">
+        <div class="step-ball">4</div>
+        <div class="step-label">Review & Submit</div>
+      </div>
+    </div>
+
+    <div class="apply-layout">
+      <!-- Form -->
+      <div>
+        <!-- Step 1: Personal Info -->
+        <div id="step1" class="apply-form-card">
+          <div class="form-section-header">
+            <span>👤</span>
+            <h4>Step 1 — Personal Information</h4>
+          </div>
+          <div class="form-body">
+            <div class="form-2col">
+              <div class="form-group">
+                <label class="form-label" for="aFirstName">First Name <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aFirstName" value="Ravi" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="aLastName">Last Name <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aLastName" value="Kumar" required />
+              </div>
+            </div>
+            <div class="form-2col">
+              <div class="form-group">
+                <label class="form-label" for="aDob">Date of Birth <span class="required">*</span></label>
+                <input type="date" class="form-control" id="aDob" value="2002-04-15" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="aGender">Gender <span class="required">*</span></label>
+                <select class="form-control" id="aGender" required>
+                  <option selected>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-2col">
+              <div class="form-group">
+                <label class="form-label" for="aCategory">Category <span class="required">*</span></label>
+                <select class="form-control" id="aCategory" required>
+                  <option>General</option>
+                  <option selected>OBC</option>
+                  <option>SC</option>
+                  <option>ST</option>
+                  <option>EWS</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="aPhone">Mobile Number <span class="required">*</span></label>
+                <input type="tel" class="form-control" id="aPhone" value="9876543210" required maxlength="10" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="aEmail">Email Address <span class="required">*</span></label>
+              <input type="email" class="form-control" id="aEmail" value="ravi.kumar@example.com" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="aAddress">Permanent Address <span class="required">*</span></label>
+              <textarea class="form-control" id="aAddress" rows="2" required>12, Green Park Colony, Nagpur, Maharashtra - 440001</textarea>
+            </div>
+            <div class="form-2col">
+              <div class="form-group">
+                <label class="form-label" for="aState">State <span class="required">*</span></label>
+                <select class="form-control" id="aState" required>
+                  <option selected>Maharashtra</option>
+                  <option>Delhi</option>
+                  <option>Tamil Nadu</option>
+                  <option>Karnataka</option>
+                  <option>Uttar Pradesh</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="aIncome">Annual Family Income (₹) <span class="required">*</span></label>
+                <input type="number" class="form-control" id="aIncome" value="250000" required />
+              </div>
+            </div>
+            <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+              <button class="btn btn-primary" onclick="goToStep(2)">Next: Academic Details →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Academic -->
+        <div id="step2" class="apply-form-card" style="display:none;">
+          <div class="form-section-header">
+            <span>🎓</span>
+            <h4>Step 2 — Academic Details</h4>
+          </div>
+          <div class="form-body">
+            <div class="form-2col">
+              <div class="form-group">
+                <label class="form-label" for="aCourse">Current Course <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aCourse" value="B.Tech Computer Science" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="aYear">Current Year <span class="required">*</span></label>
+                <select class="form-control" id="aYear" required>
+                  <option>1st Year</option>
+                  <option selected>2nd Year</option>
+                  <option>3rd Year</option>
+                  <option>4th Year</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="aCollege">College/Institution Name <span class="required">*</span></label>
+              <input type="text" class="form-control" id="aCollege" value="Government Engineering College, Nagpur" required />
+            </div>
+            <div class="form-2col">
+              <div class="form-group">
+                <label class="form-label" for="aBoard">Board/University <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aBoard" value="RTMNU (Nagpur University)" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="aPercent">Last Exam % / CGPA <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aPercent" value="87.4%" required />
+              </div>
+            </div>
+            <div class="form-2col">
+              <div class="form-group">
+                <label class="form-label" for="aRollNo">College Roll Number <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aRollNo" value="GEC2023CS042" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="aBankAc">Bank Account Number <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aBankAc" placeholder="For direct disbursement" required />
+              </div>
+            </div>
+            <div class="form-2col">
+              <div class="form-group">
+                <label class="form-label" for="aIfsc">IFSC Code <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aIfsc" placeholder="e.g. SBIN0001234" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="aAadhaar">Aadhaar Number <span class="required">*</span></label>
+                <input type="text" class="form-control" id="aAadhaar" placeholder="12-digit Aadhaar" maxlength="12" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="aPersonalStatement">Personal Statement <span class="required">*</span></label>
+              <textarea class="form-control" id="aPersonalStatement" rows="4" placeholder="Describe why you deserve this scholarship, your goals, and how it will help you. (100–300 words)" required></textarea>
+              <div class="form-hint">100–300 words recommended</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;">
+              <button class="btn btn-ghost" onclick="goToStep(1)">← Back</button>
+              <button class="btn btn-primary" onclick="goToStep(3)">Next: Upload Documents →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Documents -->
+        <div id="step3" class="apply-form-card" style="display:none;">
+          <div class="form-section-header">
+            <span>📄</span>
+            <h4>Step 3 — Upload Documents</h4>
+          </div>
+          <div class="form-body">
+            <div class="alert alert-info" style="margin-bottom:24px;">
+              ℹ️ Upload clear scanned copies. All files must be under 5MB. Accepted formats: PDF, JPG, PNG.
+            </div>
+
+            <div style="display:grid;gap:16px;">
+              <div>
+                <label class="form-label">📋 Marksheet / Grade Card <span class="required">*</span></label>
+                <div class="file-upload" id="upload1">
+                  <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+                  <div class="upload-icon">📋</div>
+                  <p><span>Upload Marksheet</span></p>
+                  <p>Class 10/12 or latest semester results</p>
+                </div>
+              </div>
+              <div>
+                <label class="form-label">💳 Aadhaar Card <span class="required">*</span></label>
+                <div class="file-upload" id="upload2">
+                  <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+                  <div class="upload-icon">💳</div>
+                  <p><span>Upload Aadhaar Card</span></p>
+                  <p>Both sides clearly visible</p>
+                </div>
+              </div>
+              <div>
+                <label class="form-label">📊 Income Certificate <span class="required">*</span></label>
+                <div class="file-upload" id="upload3">
+                  <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+                  <div class="upload-icon">📊</div>
+                  <p><span>Upload Income Certificate</span></p>
+                  <p>Issued by competent authority</p>
+                </div>
+              </div>
+              <div>
+                <label class="form-label">🏦 Bank Passbook (First Page)</label>
+                <div class="file-upload" id="upload4">
+                  <input type="file" accept=".pdf,.jpg,.jpeg,.png" />
+                  <div class="upload-icon">🏦</div>
+                  <p><span>Upload Bank Passbook</span></p>
+                  <p>Showing account number and IFSC</p>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;margin-top:24px;">
+              <button class="btn btn-ghost" onclick="goToStep(2)">← Back</button>
+              <button class="btn btn-primary" onclick="goToStep(4)">Next: Review & Submit →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Review & Submit -->
+        <div id="step4" class="apply-form-card" style="display:none;">
+          <div class="form-section-header">
+            <span>✅</span>
+            <h4>Step 4 — Review & Submit</h4>
+          </div>
+          <div class="form-body">
+            <div class="alert alert-warning" style="margin-bottom:20px;">
+              ⚠️ Please review all your details carefully before submitting. Changes cannot be made after submission.
+            </div>
+
+            <h5 style="margin-bottom:14px;color:var(--text-muted);text-transform:uppercase;font-size:0.78rem;letter-spacing:0.5px;">Personal Information</h5>
+            <div id="reviewPersonal" style="background:var(--surface-2);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;font-size:0.85rem;display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+
+            <h5 style="margin-bottom:14px;color:var(--text-muted);text-transform:uppercase;font-size:0.78rem;letter-spacing:0.5px;">Academic Details</h5>
+            <div id="reviewAcademic" style="background:var(--surface-2);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;font-size:0.85rem;display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+
+            <div class="form-check" style="margin-bottom:20px;">
+              <input type="checkbox" id="declarationCheck" />
+              <label class="form-check-label" for="declarationCheck">
+                I hereby declare that all the information provided by me is true and correct to the best of my knowledge. I understand that providing false information will disqualify my application.
+              </label>
+            </div>
+
+            <div style="display:flex;justify-content:space-between;margin-top:8px;flex-wrap:wrap;gap:10px;">
+              <button class="btn btn-ghost" onclick="goToStep(3)">← Back</button>
+              <button class="btn btn-primary btn-lg" id="submitApplicationBtn" onclick="submitApplication()">
+                🚀 Submit Application
+              </button>
+            </div>
+          </div>
+
+          <!-- Success -->
+          <div class="apply-success" id="applySuccess">
+            <div class="success-anim">🎉</div>
+            <h2>Application Submitted!</h2>
+            <p style="color:var(--text-muted);margin-bottom:8px;">Your scholarship application has been received successfully.</p>
+            <div class="ref-id" id="appRefId">#APP-2026-XXXX</div>
+            <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:28px;">Keep this reference ID for future follow-up. You'll receive a confirmation email shortly.</p>
+            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+              <button class="btn btn-outline" onclick="openReceiptModal()">📄 Download / Print Official Slip</button>
+              <a href="dashboard.html" class="btn btn-primary">View My Applications</a>
+              <a href="scholarships.html" class="btn btn-ghost">Apply for More</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="apply-summary">
+        <div class="summary-card">
+          <div class="summary-header">
+            <h4 id="summaryTitle">National Merit Scholarship</h4>
+            <div class="summary-amount" id="summaryAmount">₹75,000/yr</div>
+            <div class="summary-org" id="summaryOrg">🏛️ Government of India</div>
+          </div>
+          <div class="summary-body">
+            <div class="summary-row">
+              <span class="row-key">Category</span>
+              <span class="row-val" id="summaryCategory">Merit-Based</span>
+            </div>
+            <div class="summary-row">
+              <span class="row-key">Level</span>
+              <span class="row-val" id="summaryLevel">Undergraduate</span>
+            </div>
+            <div class="summary-row">
+              <span class="row-key">Deadline</span>
+              <span class="row-val" style="color:var(--accent);" id="summaryDeadline">Oct 31, 2026</span>
+            </div>
+            <div class="summary-row">
+              <span class="row-key">Seats Available</span>
+              <span class="row-val" id="summarySeats">158 remaining</span>
+            </div>
+            <div class="summary-row">
+              <span class="row-key">Eligibility</span>
+              <span class="row-val" id="summaryElig" style="font-size:0.78rem;color:var(--text-muted);font-weight:500;"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:20px;margin-top:16px;">
+          <h5 style="margin-bottom:12px;font-size:0.88rem;">📌 Application Checklist</h5>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem;" id="checklist">
+            <div style="display:flex;align-items:center;gap:8px;" id="chk1"><span>⬜</span> Personal Info filled</div>
+            <div style="display:flex;align-items:center;gap:8px;" id="chk2"><span>⬜</span> Academic Details filled</div>
+            <div style="display:flex;align-items:center;gap:8px;" id="chk3"><span>⬜</span> Documents uploaded</div>
+            <div style="display:flex;align-items:center;gap:8px;" id="chk4"><span>⬜</span> Declaration agreed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Receipt Modal -->
+<div class="receipt-modal-backdrop" id="receiptModal">
+  <div class="receipt-card">
+    <div class="receipt-header">
+      <div style="font-size:1.8rem;margin-bottom:4px;">🎓 ScholarBridge</div>
+      <h3 style="font-size:1.15rem;margin-bottom:4px;">Official Scholarship Application Slip</h3>
+      <p style="font-size:0.75rem;color:var(--text-muted);margin:0;">National Scholarship Assistance Portal & Verification Wing</p>
+    </div>
+
+    <div class="receipt-row">
+      <span class="receipt-label">Application Reference ID</span>
+      <span class="receipt-value" id="receiptAppId" style="color:var(--primary);font-weight:800;">#APP-2026-XXXX</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Scholarship Applied</span>
+      <span class="receipt-value" id="receiptSchTitle">National Merit Scholarship</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Provider Organization</span>
+      <span class="receipt-value" id="receiptSchOrg">Government of India</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Applicant Full Name</span>
+      <span class="receipt-value" id="receiptName">Student Name</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Registered Email</span>
+      <span class="receipt-value" id="receiptEmail">student@example.com</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Submission Timestamp</span>
+      <span class="receipt-value" id="receiptDate">Today</span>
+    </div>
+    <div class="receipt-row">
+      <span class="receipt-label">Application Status</span>
+      <span class="receipt-value" style="color:#22c55e;">Submitted & Under Review</span>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:14px;border-top:1px solid var(--border-light);">
+      <div>
+        <div class="receipt-stamp">VERIFIED SUBMISSION</div>
+        <div style="font-size:0.68rem;color:var(--text-muted);margin-top:6px;">Digitally signed & verified by ScholarBridge Portal</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:2.2rem;">🏛️</div>
+        <div style="font-size:0.68rem;color:var(--text-muted);">Official Seal</div>
+      </div>
+    </div>
+
+    <div class="receipt-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;">
+      <button class="btn btn-outline btn-sm" onclick="closeReceiptModal()">Close</button>
+      <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+let currentStep = 1;
+const totalSteps = 4;
+
+// Load scholarship info
+document.addEventListener('DOMContentLoaded', () => {
+  const schId = localStorage.getItem('applyScholarshipId') || 'sch001';
+  const sch = AppState.scholarships.find(s => s.id === schId) || AppState.scholarships[0];
+
+  document.getElementById('applyPageTitle').textContent = `Apply: ${sch.title}`;
+  document.getElementById('applyPageOrg').textContent = `${sch.organization} — ${sch.amountDisplay}`;
+  document.getElementById('summaryTitle').textContent = sch.title;
+  document.getElementById('summaryAmount').textContent = sch.amountDisplay;
+  document.getElementById('summaryOrg').textContent = `${sch.orgEmoji} ${sch.organization}`;
+  document.getElementById('summaryCategory').textContent = sch.category;
+  document.getElementById('summaryLevel').textContent = sch.level.map(l => l.charAt(0).toUpperCase() + l.slice(1)).join(', ');
+  document.getElementById('summaryDeadline').textContent = sch.deadlineDisplay;
+  document.getElementById('summarySeats').textContent = `${sch.seats - sch.applied} remaining`;
+  document.getElementById('summaryElig').textContent = sch.eligibility;
+});
+
+function goToStep(step) {
+  // Validate current step
+  if (step > currentStep && !validateStep(currentStep)) return;
+
+  // Hide all
+  for (let i = 1; i <= totalSteps; i++) {
+    const el = document.getElementById(`step${i}`);
+    if (el) el.style.display = 'none';
+  }
+
+  // Show target
+  const target = document.getElementById(`step${step}`);
+  if (target) target.style.display = 'block';
+
+  // Update step indicators
+  document.querySelectorAll('.apply-step').forEach((el, idx) => {
+    el.classList.remove('active', 'done');
+    if (idx + 1 < step) el.classList.add('done');
+    if (idx + 1 === step) el.classList.add('active');
+  });
+
+  // Update checklist
+  updateChecklist(step);
+
+  if (step === 4) populateReview();
+
+  currentStep = step;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validateStep(step) {
+  if (step === 1) {
+    const required = ['aFirstName','aLastName','aDob','aPhone','aEmail','aAddress','aIncome'];
+    for (const id of required) {
+      if (!document.getElementById(id).value.trim()) {
+        showToast('Please fill all required fields', 'warning');
+        document.getElementById(id).focus();
+        return false;
+      }
+    }
+  }
+  if (step === 2) {
+    if (!document.getElementById('aPersonalStatement').value.trim()) {
+      showToast('Please write your personal statement', 'warning');
+      return false;
+    }
+  }
+  return true;
+}
+
+function updateChecklist(step) {
+  const checks = {chk1: step > 1, chk2: step > 2, chk3: step > 3, chk4: false};
+  Object.entries(checks).forEach(([id, done]) => {
+    const el = document.getElementById(id);
+    if (el) el.querySelector('span').textContent = done ? '✅' : '⬜';
+  });
+}
+
+function populateReview() {
+  const personal = [
+    ['Name', `${document.getElementById('aFirstName').value} ${document.getElementById('aLastName').value}`],
+    ['Date of Birth', document.getElementById('aDob').value],
+    ['Gender', document.getElementById('aGender').value],
+    ['Category', document.getElementById('aCategory').value],
+    ['Phone', document.getElementById('aPhone').value],
+    ['Email', document.getElementById('aEmail').value],
+    ['Annual Income', '₹' + Number(document.getElementById('aIncome').value).toLocaleString('en-IN')],
+    ['State', document.getElementById('aState').value],
+  ];
+  document.getElementById('reviewPersonal').innerHTML = personal.map(([k,v]) =>
+    `<div><span style="color:var(--text-muted);">${k}:</span><br><strong>${v}</strong></div>`).join('');
+
+  const academic = [
+    ['Course', document.getElementById('aCourse').value],
+    ['Year', document.getElementById('aYear').value],
+    ['College', document.getElementById('aCollege').value],
+    ['Last Exam %', document.getElementById('aPercent').value],
+    ['Roll No.', document.getElementById('aRollNo').value],
+  ];
+  document.getElementById('reviewAcademic').innerHTML = academic.map(([k,v]) =>
+    `<div><span style="color:var(--text-muted);">${k}:</span><br><strong>${v}</strong></div>`).join('');
+}
+
+function submitApplication() {
+  if (!document.getElementById('declarationCheck').checked) {
+    showToast('Please agree to the declaration before submitting', 'warning');
+    return;
+  }
+
+  const btn = document.getElementById('submitApplicationBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner" style="width:18px;height:18px;border-width:2px;"></span> Submitting...';
+
+  setTimeout(() => {
+    const refId = 'APP-2026-' + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('appRefId').textContent = '#' + refId;
+
+    document.querySelector('#step4 .form-body > *:not(#applySuccess)') &&
+      document.querySelectorAll('#step4 .form-body > *:not(#applySuccess)').forEach(el => el.style.display = 'none');
+
+    // Hide form body items
+    document.getElementById('step4').querySelector('.form-body').innerHTML = '';
+    document.getElementById('step4').querySelector('.form-body').appendChild(
+      Object.assign(document.getElementById('applySuccess'), { style: 'display:block' })
+    );
+    document.getElementById('applySuccess').style.display = 'block';
+
+    document.getElementById('chk4').querySelector('span').textContent = '✅';
+    showToast('Application submitted successfully! 🎉', 'success');
+  }, 2000);
+}
+
+function openReceiptModal() {
+  const modal = document.getElementById('receiptModal');
+  if (!modal) return;
+  const firstName = document.getElementById('pFirstName') ? document.getElementById('pFirstName').value.trim() : '';
+  const lastName = document.getElementById('pLastName') ? document.getElementById('pLastName').value.trim() : '';
+  const fullName = (firstName || lastName) ? `${firstName} ${lastName}` : (AppState.currentUser ? AppState.currentUser.name : 'Ravi Kumar');
+  const email = (document.getElementById('pEmail') && document.getElementById('pEmail').value.trim()) || (AppState.currentUser ? AppState.currentUser.email : 'student@example.com');
+  
+  document.getElementById('receiptAppId').textContent = document.getElementById('appRefId').textContent || '#APP-2026-9812';
+  document.getElementById('receiptSchTitle').textContent = document.getElementById('summaryTitle').textContent || 'National Merit Scholarship';
+  document.getElementById('receiptSchOrg').textContent = document.getElementById('summaryOrg').textContent || 'Government of India';
+  document.getElementById('receiptName').textContent = fullName;
+  document.getElementById('receiptEmail').textContent = email;
+  document.getElementById('receiptDate').textContent = new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+  
+  modal.classList.add('open');
+}
+
+function closeReceiptModal() {
+  const modal = document.getElementById('receiptModal');
+  if (modal) modal.classList.remove('open');
+}
+</script>
+</body>
+</html>

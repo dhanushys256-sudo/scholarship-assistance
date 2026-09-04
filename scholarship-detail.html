@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scholarship Detail — ScholarBridge</title>
+  <meta name="description" content="View full scholarship details, eligibility criteria, required documents, and apply online." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--surface-2); }
+    .detail-page { padding: calc(var(--nav-height) + 32px) 0 80px; }
+
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .detail-card { background: white; border-radius: var(--radius-md); border: 1px solid var(--border-light); overflow: hidden; margin-bottom: 20px; }
+    .detail-section { padding: 28px; border-bottom: 1px solid var(--border-light); }
+    .detail-section:last-child { border-bottom: none; }
+    .detail-section h4 { margin-bottom: 16px; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+
+    .doc-required { display: flex; flex-wrap: wrap; gap: 10px; }
+    .doc-chip { display: flex; align-items: center; gap: 6px; padding: 8px 14px; background: var(--surface-2); border: 1px solid var(--border-light); border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 500; }
+
+    .share-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* Apply CTA Card */
+    .apply-cta-card {
+      position: sticky;
+      top: calc(var(--nav-height) + 20px);
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .apply-cta-card .header {
+      background: var(--gradient-dark);
+      padding: 28px 24px;
+      color: white;
+    }
+
+    .apply-cta-card .header .amount { font-size: 2.4rem; font-weight: 900; background: linear-gradient(135deg, var(--gold-light), white); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .apply-cta-card .header .per-yr { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
+    .apply-cta-card .header h3 { color: white; margin-top: 14px; font-size: 1rem; }
+
+    .apply-cta-card .body { padding: 24px; }
+    .cta-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .cta-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem; }
+    .cta-row .cta-label { color: var(--text-muted); }
+    .cta-row .cta-val   { font-weight: 700; }
+    .cta-row .cta-val.urgent { color: var(--accent); }
+
+    .seat-bar { margin: 16px 0; }
+    .seat-bar .seat-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; }
+
+    @media (max-width: 1024px) {
+      .detail-layout { grid-template-columns: 1fr; }
+      .apply-cta-card { position: static; order: -1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+<div class="toast-container"></div>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo"><div class="logo-icon">🎓</div>Scholar<span>Bridge</span></a>
+    <ul class="navbar-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="scholarships.html">Scholarships</a></li>
+      <li><a href="eligibility.html">Eligibility</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="navLoginBtn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="dashboard.html" class="btn btn-outline btn-sm" id="navDashBtn" style="display:none;">Dashboard</a>
+      <button class="btn btn-ghost btn-sm" id="navLogoutBtn" style="display:none;" onclick="logout()">Logout</button>
+    </div>
+    <button class="nav-mobile-btn" id="navMobileBtn">☰</button>
+  </div>
+</nav>
+
+<div class="detail-page">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:20px;">
+      <a href="index.html" style="color:var(--primary);">Home</a> →
+      <a href="scholarships.html" style="color:var(--primary);">Scholarships</a> →
+      <span id="breadTitle">National Merit Scholarship</span>
+    </div>
+
+    <div class="detail-layout">
+      <!-- Left: Details -->
+      <div>
+        <!-- Header -->
+        <div class="detail-card">
+          <div class="detail-section">
+            <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;">
+              <div id="detailEmoji" style="font-size:2.5rem;width:64px;height:64px;border-radius:18px;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-shrink:0;">🏛️</div>
+              <div>
+                <h1 id="detailTitle" style="font-size:1.5rem;margin-bottom:6px;"></h1>
+                <p id="detailOrg" style="color:var(--text-muted);font-size:0.9rem;margin-bottom:10px;"></p>
+                <div style="display:flex;flex-wrap:wrap;gap:8px;" id="detailTags"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h4>📋 About this Scholarship</h4>
+            <p id="detailDesc"></p>
+          </div>
+
+          <div class="detail-section">
+            <h4>✅ Eligibility Criteria</h4>
+            <p id="detailEligibility"></p>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;" id="detailLevelGrid"></div>
+          </div>
+
+          <div class="detail-section">
+            <h4>📄 Required Documents</h4>
+            <div class="doc-required" id="detailDocs"></div>
+          </div>
+
+          <div class="detail-section">
+            <h4>📌 Important Notes</h4>
+            <ul style="list-style:disc;padding-left:20px;display:flex;flex-direction:column;gap:8px;">
+              <li style="font-size:0.88rem;color:var(--text-secondary);">Applications must be submitted before the deadline. Late submissions will not be accepted.</li>
+              <li style="font-size:0.88rem;color:var(--text-secondary);">All documents must be self-attested and clearly legible.</li>
+              <li style="font-size:0.88rem;color:var(--text-secondary);">The scholarship amount will be credited directly to your bank account linked with Aadhaar.</li>
+              <li style="font-size:0.88rem;color:var(--text-secondary);">Renewal is required every academic year by maintaining the minimum required percentage.</li>
+            </ul>
+          </div>
+
+          <div class="detail-section">
+            <h4>🔗 Share this Scholarship</h4>
+            <div class="share-btns">
+              <button class="btn btn-ghost btn-sm" onclick="shareScholarship('whatsapp')">📱 WhatsApp</button>
+              <button class="btn btn-ghost btn-sm" onclick="shareScholarship('copy')">🔗 Copy Link</button>
+              <button class="btn btn-ghost btn-sm" onclick="window.print()">🖨️ Print</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Similar Scholarships -->
+        <h3 style="margin-bottom:16px;font-size:1rem;">🌟 Similar Scholarships</h3>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;" id="similarGrid"></div>
+      </div>
+
+      <!-- Right: Apply CTA -->
+      <div>
+        <div class="apply-cta-card">
+          <div class="header">
+            <div class="amount" id="ctaAmount">₹75,000</div>
+            <div class="per-yr">per year</div>
+            <h3 id="ctaTitle">National Merit Scholarship</h3>
+          </div>
+          <div class="body">
+            <div class="cta-meta">
+              <div class="cta-row">
+                <span class="cta-label">Deadline</span>
+                <span class="cta-val urgent" id="ctaDeadline">Oct 31, 2026</span>
+              </div>
+              <div class="cta-row">
+                <span class="cta-label">Days Remaining</span>
+                <span class="cta-val urgent" id="ctaDays">—</span>
+              </div>
+              <div class="cta-row">
+                <span class="cta-label">Total Seats</span>
+                <span class="cta-val" id="ctaSeats">500</span>
+              </div>
+              <div class="cta-row">
+                <span class="cta-label">Applied So Far</span>
+                <span class="cta-val" id="ctaApplied">342</span>
+              </div>
+            </div>
+            <div class="seat-bar">
+              <div class="seat-label">
+                <span>Seats Filled</span>
+                <span id="ctaSeatPct">68%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="ctaSeatBar" style="width:68%;"></div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-full btn-lg" id="ctaApplyBtn" onclick="applyScholarship(currentSchId)" style="margin-bottom:10px;">
+              📝 Apply Now
+            </button>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+              <button class="btn btn-outline btn-sm" onclick="addToGoogleCalendar(currentSchId)" title="Add Deadline to Google Calendar">
+                📅 Google Cal
+              </button>
+              <button class="btn btn-outline btn-sm" onclick="downloadIcsFile(currentSchId)" title="Download iCal (.ics) reminder">
+                📥 iCal (.ics)
+              </button>
+            </div>
+            <button class="btn btn-ghost btn-full" onclick="showToast('Scholarship bookmarked! 🔖','success')">
+              🔖 Bookmark
+            </button>
+
+            <div class="alert alert-success" style="margin-top:16px;font-size:0.8rem;">
+              ✅ ScholarBridge helps you apply for free. No hidden charges.
+            </div>
+          </div>
+        </div>
+
+        <!-- Help -->
+        <div class="card" style="padding:20px;margin-top:16px;text-align:center;">
+          <div style="font-size:1.8rem;margin-bottom:8px;">🙋</div>
+          <h5 style="margin-bottom:6px;font-size:0.9rem;">Need help applying?</h5>
+          <p style="font-size:0.8rem;margin-bottom:14px;">Our support team is happy to assist.</p>
+          <a href="contact.html" class="btn btn-outline btn-sm btn-full">Contact Support</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+let currentSchId = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  const schId = localStorage.getItem('selectedScholarship') || 'sch001';
+  currentSchId = schId;
+  const sch = AppState.scholarships.find(s => s.id === schId) || AppState.scholarships[0];
+
+  // Fill details
+  document.getElementById('breadTitle').textContent = sch.title;
+  document.getElementById('detailTitle').textContent = sch.title;
+  document.getElementById('detailOrg').textContent = `🏢 ${sch.organization}`;
+  document.getElementById('detailEmoji').style.background = sch.orgColor;
+  document.getElementById('detailEmoji').textContent = sch.orgEmoji;
+  document.getElementById('detailDesc').textContent = sch.description;
+  document.getElementById('detailEligibility').textContent = sch.eligibility;
+
+  document.getElementById('detailTags').innerHTML = sch.tags.map(t => `<span class="badge badge-orange">${t}</span>`).join('');
+
+  document.getElementById('detailLevelGrid').innerHTML = sch.level.map(l => `
+    <div style="background:var(--surface-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px;text-align:center;font-size:0.82rem;font-weight:600;color:var(--primary);">
+      📚 ${l.charAt(0).toUpperCase() + l.slice(1)}
+    </div>`).join('');
+
+  const docLabels = {
+    marksheet: '📋 Marksheet',
+    income_certificate: '📊 Income Certificate',
+    aadhaar: '💳 Aadhaar Card',
+    bank_passbook: '🏦 Bank Passbook',
+    caste_certificate: '🏷️ Caste Certificate',
+    merit_certificate: '🥇 Merit Certificate',
+    fee_receipt: '🧾 Fee Receipt',
+    domicile_certificate: '🏘️ Domicile Certificate',
+    service_certificate: '🎖️ Service Certificate',
+  };
+  document.getElementById('detailDocs').innerHTML = sch.documents.map(d =>
+    `<div class="doc-chip">${docLabels[d] || d}</div>`).join('');
+
+  // CTA
+  document.getElementById('ctaAmount').textContent = '₹' + Number(sch.amount).toLocaleString('en-IN');
+  document.getElementById('ctaTitle').textContent = sch.title;
+  document.getElementById('ctaDeadline').textContent = sch.deadlineDisplay;
+  document.getElementById('ctaDays').textContent = daysLeft(sch.deadline) + ' days';
+  document.getElementById('ctaSeats').textContent = sch.seats;
+  document.getElementById('ctaApplied').textContent = sch.applied;
+  const pct = Math.round((sch.applied / sch.seats) * 100);
+  document.getElementById('ctaSeatPct').textContent = pct + '%';
+  document.getElementById('ctaSeatBar').style.width = pct + '%';
+
+  // Similar
+  const similar = AppState.scholarships.filter(s => s.id !== schId && (s.category === sch.category || s.level.some(l => sch.level.includes(l)))).slice(0, 4);
+  document.getElementById('similarGrid').innerHTML = similar.map(s => createScholarshipCard(s)).join('');
+
+  initScrollAnimations();
+  document.title = `${sch.title} — ScholarBridge`;
+});
+
+window.shareScholarship = (type) => {
+  if (type === 'copy') {
+    navigator.clipboard.writeText(window.location.href).then(() => showToast('Link copied to clipboard! 🔗', 'success'));
+  } else if (type === 'whatsapp') {
+    window.open(`https://wa.me/?text=${encodeURIComponent('Check out this scholarship: ' + window.location.href)}`);
+  }
+};
+</script>
+</body>
+</html>

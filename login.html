@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — ScholarBridge</title>
+  <meta name="description" content="Sign in to your ScholarBridge account to access scholarships, track applications, and more." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--surface-2); }
+
+    .auth-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* Left Panel */
+    .auth-left {
+      background: var(--gradient-dark);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-left::before {
+      content: '';
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,0,0.25) 0%, transparent 70%);
+      top: -100px; right: -80px;
+    }
+
+    .auth-left .logo { display: flex; align-items: center; gap: 10px; color: white; font-weight: 800; font-size: 1.4rem; margin-bottom: 60px; position: relative; z-index: 1; }
+    .auth-left .logo .logo-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+
+    .auth-left-content { position: relative; z-index: 1; }
+    .auth-left-content h2 { color: white; font-size: 2rem; margin-bottom: 16px; }
+    .auth-left-content p  { color: rgba(255,255,255,0.65); margin-bottom: 40px; }
+
+    .auth-features { display: flex; flex-direction: column; gap: 20px; }
+    .auth-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .auth-feature .feature-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .auth-feature-info h5 { color: white; font-size: 0.9rem; margin-bottom: 3px; }
+    .auth-feature-info p  { color: rgba(255,255,255,0.55); font-size: 0.82rem; }
+
+    /* Right Panel */
+    .auth-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 56px;
+      overflow-y: auto;
+    }
+
+    .auth-form-wrap { width: 100%; max-width: 420px; }
+
+    .auth-form-wrap .form-title { font-size: 1.8rem; margin-bottom: 8px; }
+    .auth-form-wrap .form-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 32px; }
+
+    .social-login {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .social-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 16px;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      background: white;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: var(--transition-fast);
+      color: var(--text-primary);
+    }
+    .social-btn:hover { border-color: var(--primary); background: var(--surface-3); }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--text-muted); font-size: 0.82rem;
+      margin-bottom: 24px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1; height: 1px;
+      background: var(--border-light);
+    }
+
+    .forgot-link {
+      font-size: 0.82rem;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: auto;
+      display: block;
+      text-align: right;
+      margin-top: -14px;
+      margin-bottom: 20px;
+    }
+    .forgot-link:hover { text-decoration: underline; }
+
+    .auth-footer-text {
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 20px;
+    }
+    .auth-footer-text a { color: var(--primary); font-weight: 600; }
+    .auth-footer-text a:hover { text-decoration: underline; }
+
+    .error-msg {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: #B91C1C;
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-left { display: none; }
+      .auth-right { padding: 40px 24px; min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+<div class="toast-container"></div>
+
+<div class="auth-page">
+  <!-- Left -->
+  <div class="auth-left">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🎓</div> ScholarBridge
+    </a>
+    <div class="auth-left-content">
+      <h2>Welcome Back,<br>Scholar! 👋</h2>
+      <p>Sign in to continue your scholarship journey and access the opportunities waiting for you.</p>
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="feature-icon">🏅</div>
+          <div class="auth-feature-info">
+            <h5>200+ Scholarships</h5>
+            <p>Access a curated database of government & private scholarships</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="feature-icon">📊</div>
+          <div class="auth-feature-info">
+            <h5>Track Applications</h5>
+            <p>Monitor your application status in real-time from your dashboard</p>
+          </div>
+        </div>
+        <div class="auth-feature">
+          <div class="feature-icon">🔔</div>
+          <div class="auth-feature-info">
+            <h5>Deadline Alerts</h5>
+            <p>Never miss a deadline with personalized reminder notifications</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+      <h2 class="form-title">Sign In</h2>
+      <p class="form-subtitle">Enter your credentials to access your account</p>
+
+      <div class="social-login">
+        <button class="social-btn" id="googleSignIn" onclick="handleGoogleSign()">
+          <span>🌐</span> Google
+        </button>
+        <button class="social-btn" id="phoneSignIn" onclick="showToast('Phone login coming soon!','info')">
+          <span>📱</span> Phone
+        </button>
+      </div>
+
+      <div class="divider">or sign in with email</div>
+
+      <div class="error-msg" id="loginError"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email Address <span class="required">*</span></label>
+          <div class="input-group">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-control" id="loginEmail" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password <span class="required">*</span></label>
+          <div class="input-group">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required autocomplete="current-password" />
+            <button type="button" class="input-toggle">👁️</button>
+          </div>
+        </div>
+
+        <a class="forgot-link" onclick="showToast('Password reset email sent!','success')">Forgot password?</a>
+
+        <div class="form-check" style="margin-bottom:24px;">
+          <input type="checkbox" id="rememberMe" />
+          <label class="form-check-label" for="rememberMe">Keep me signed in for 30 days</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="loginBtn">
+          Sign In →
+        </button>
+      </form>
+
+      <div class="alert alert-info" style="margin-top:20px;">
+        ℹ️ <strong>Demo Mode:</strong> Enter any email & password to sign in and explore the platform.
+      </div>
+
+      <p class="auth-footer-text">
+        Don't have an account? <a href="register.html">Create one for free →</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  function handleGoogleSign() {
+    if (AppState.isDemo) {
+      AppState.currentUser = AppState.mockUser;
+      localStorage.setItem('demoUser', JSON.stringify(AppState.mockUser));
+      showToast('Signed in with Google! 🎉', 'success');
+      setTimeout(() => window.location.href = 'dashboard.html', 1000);
+    } else {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider).then(() => window.location.href = 'dashboard.html').catch(err => showToast(err.message, 'error'));
+    }
+  }
+</script>
+</body>
+</html>

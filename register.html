@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — ScholarBridge</title>
+  <meta name="description" content="Create your free ScholarBridge account and start applying for scholarships today." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--surface-2); }
+
+    .auth-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+    }
+
+    .auth-left {
+      background: var(--gradient-dark);
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 60px 56px;
+      position: relative; overflow: hidden;
+    }
+    .auth-left::before {
+      content: ''; position: absolute;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,184,0,0.2) 0%, transparent 70%);
+      bottom: -100px; left: -80px;
+    }
+    .auth-left .logo { display: flex; align-items: center; gap: 10px; color: white; font-weight: 800; font-size: 1.4rem; margin-bottom: 48px; position: relative; z-index: 1; }
+    .auth-left .logo .logo-icon { width: 42px; height: 42px; border-radius: 12px; background: var(--gradient); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+    .auth-left-content { position: relative; z-index: 1; }
+    .auth-left-content h2 { color: white; font-size: 1.9rem; margin-bottom: 14px; }
+    .auth-left-content p { color: rgba(255,255,255,0.65); margin-bottom: 32px; }
+
+    .progress-steps { display: flex; flex-direction: column; gap: 14px; }
+    .progress-step {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: var(--transition);
+    }
+    .progress-step.active { background: rgba(255,107,0,0.18); border-color: rgba(255,107,0,0.4); }
+    .progress-step .step-indicator {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.6);
+      flex-shrink: 0;
+    }
+    .progress-step.active .step-indicator { background: var(--gradient); border-color: var(--primary); color: white; box-shadow: 0 4px 14px rgba(255,107,0,0.4); }
+    .progress-step h5 { color: white; font-size: 0.88rem; margin-bottom: 2px; }
+    .progress-step p  { color: rgba(255,255,255,0.5); font-size: 0.75rem; }
+
+    /* Right */
+    .auth-right {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 40px 56px;
+      overflow-y: auto;
+    }
+
+    .auth-form-wrap { width: 100%; max-width: 460px; padding: 20px 0; }
+    .auth-form-wrap .form-title { font-size: 1.8rem; margin-bottom: 6px; }
+    .auth-form-wrap .form-subtitle { color: var(--text-muted); font-size: 0.88rem; margin-bottom: 28px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .strength-bar { margin-top: 8px; }
+    .strength-segments { display: flex; gap: 4px; margin-bottom: 4px; }
+    .strength-seg { flex: 1; height: 4px; border-radius: 2px; background: var(--border-light); transition: background 0.3s; }
+    .strength-label { font-size: 0.75rem; color: var(--text-muted); }
+
+    @media (max-width: 768px) {
+      .auth-page { grid-template-columns: 1fr; }
+      .auth-left { display: none; }
+      .auth-right { padding: 40px 24px; min-height: 100vh; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+<div class="toast-container"></div>
+
+<div class="auth-page">
+  <!-- Left -->
+  <div class="auth-left">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🎓</div> ScholarBridge
+    </a>
+    <div class="auth-left-content">
+      <h2>Start Your Scholarship Journey Today</h2>
+      <p>Create a free account in 2 minutes and unlock access to 200+ scholarships worth crores.</p>
+      <div class="progress-steps">
+        <div class="progress-step active">
+          <div class="step-indicator">1</div>
+          <div>
+            <h5>Create Account</h5>
+            <p>Basic info — takes 2 minutes</p>
+          </div>
+        </div>
+        <div class="progress-step">
+          <div class="step-indicator">2</div>
+          <div>
+            <h5>Complete Your Profile</h5>
+            <p>Academic & personal details</p>
+          </div>
+        </div>
+        <div class="progress-step">
+          <div class="step-indicator">3</div>
+          <div>
+            <h5>Check Eligibility</h5>
+            <p>Get matched scholarships</p>
+          </div>
+        </div>
+        <div class="progress-step">
+          <div class="step-indicator">4</div>
+          <div>
+            <h5>Apply & Track</h5>
+            <p>Submit and monitor in real-time</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="auth-right">
+    <div class="auth-form-wrap">
+      <h2 class="form-title">Create Account</h2>
+      <p class="form-subtitle">Join 12,000+ students already benefiting from ScholarBridge</p>
+
+      <div id="regError" class="error-msg" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:#B91C1C;border-radius:var(--radius-sm);padding:12px 16px;font-size:0.85rem;margin-bottom:16px;display:none;"></div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regName">Full Name <span class="required">*</span></label>
+            <div class="input-group">
+              <span class="input-icon">👤</span>
+              <input type="text" class="form-control" id="regName" placeholder="Ravi Kumar" required autocomplete="name" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regPhone">Phone Number <span class="required">*</span></label>
+            <div class="input-group">
+              <span class="input-icon">📱</span>
+              <input type="tel" class="form-control" id="regPhone" placeholder="9876543210" required autocomplete="tel" maxlength="10" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Email Address <span class="required">*</span></label>
+          <div class="input-group">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-control" id="regEmail" placeholder="you@example.com" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regDob">Date of Birth <span class="required">*</span></label>
+            <input type="date" class="form-control" id="regDob" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regGender">Gender <span class="required">*</span></label>
+            <select class="form-control" id="regGender" required>
+              <option value="">Select gender</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="regCategory">Category <span class="required">*</span></label>
+            <select class="form-control" id="regCategory" required>
+              <option value="">Select category</option>
+              <option>General</option>
+              <option>OBC</option>
+              <option>SC</option>
+              <option>ST</option>
+              <option>EWS</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="regLevel">Current Level <span class="required">*</span></label>
+            <select class="form-control" id="regLevel" required>
+              <option value="">Select level</option>
+              <option value="school">School (Class 8–12)</option>
+              <option value="undergraduate">Undergraduate</option>
+              <option value="postgraduate">Postgraduate</option>
+              <option value="phd">PhD / Research</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Password <span class="required">*</span></label>
+          <div class="input-group">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-control" id="regPassword" placeholder="Create a strong password" required autocomplete="new-password" id="regPassword" />
+            <button type="button" class="input-toggle">👁️</button>
+          </div>
+          <div class="strength-bar" id="strengthBar">
+            <div class="strength-segments">
+              <div class="strength-seg" id="seg1"></div>
+              <div class="strength-seg" id="seg2"></div>
+              <div class="strength-seg" id="seg3"></div>
+              <div class="strength-seg" id="seg4"></div>
+            </div>
+            <span class="strength-label" id="strengthLabel">Enter password</span>
+          </div>
+        </div>
+
+        <div class="form-check" style="margin-bottom:24px;">
+          <input type="checkbox" id="agreeTerms" required />
+          <label class="form-check-label" for="agreeTerms">
+            I agree to the <a href="#" style="color:var(--primary);font-weight:600;">Terms of Use</a> and 
+            <a href="#" style="color:var(--primary);font-weight:600;">Privacy Policy</a>
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full btn-lg" id="regBtn">
+          Create My Account 🎓
+        </button>
+      </form>
+
+      <p style="text-align:center;font-size:0.85rem;color:var(--text-muted);margin-top:20px;">
+        Already have an account? <a href="login.html" style="color:var(--primary);font-weight:600;">Sign in →</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // Password strength
+  const pwInput = document.getElementById('regPassword');
+  if (pwInput) {
+    pwInput.addEventListener('input', () => {
+      const val = pwInput.value;
+      const strength = [val.length >= 8, /[A-Z]/.test(val), /[0-9]/.test(val), /[^A-Za-z0-9]/.test(val)];
+      const score = strength.filter(Boolean).length;
+      const colors = ['', '#EF4444', '#F97316', '#EAB308', '#22C55E'];
+      const labels = ['', 'Weak', 'Fair', 'Good', 'Strong 💪'];
+      ['seg1','seg2','seg3','seg4'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        el.style.background = i < score ? colors[score] : 'var(--border-light)';
+      });
+      document.getElementById('strengthLabel').textContent = val ? labels[score] : 'Enter password';
+      document.getElementById('strengthLabel').style.color = colors[score] || 'var(--text-muted)';
+    });
+  }
+
+  // Validate & extend register
+  document.getElementById('registerForm').addEventListener('submit', (e) => {
+    const terms = document.getElementById('agreeTerms');
+    if (!terms.checked) {
+      e.preventDefault();
+      showToast('Please agree to the Terms of Use to continue', 'warning');
+      return;
+    }
+    handleRegister(e);
+  });
+</script>
+</body>
+</html>

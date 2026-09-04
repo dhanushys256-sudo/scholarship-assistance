@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LastMinScholar — Scholarship Assistance Platform</title>
+  <meta name="description" content="Find and apply for scholarships effortlessly. LastMinScholar connects students with government and private scholarship opportunities across India." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ─── Hero Section ─── */
+    .hero {
+      min-height: 100vh;
+      background: var(--gradient-dark);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: calc(var(--nav-height) + 40px) 0 60px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,107,0,0.18) 0%, transparent 70%);
+      top: -150px;
+      right: -100px;
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,184,0,0.12) 0%, transparent 70%);
+      bottom: -100px;
+      left: -80px;
+      pointer-events: none;
+    }
+
+    .hero .container {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,107,0,0.15);
+      border: 1px solid rgba(255,107,0,0.3);
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 7px 16px;
+      border-radius: 50px;
+      margin-bottom: 24px;
+      animation: pulse-glow 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,0,0.3); }
+      50%       { box-shadow: 0 0 20px 4px rgba(255,107,0,0.2); }
+    }
+
+    .hero-content h1 {
+      color: white;
+      margin-bottom: 22px;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      line-height: 1.15;
+    }
+
+    .hero-content p {
+      color: rgba(255,255,255,0.72);
+      font-size: 1.1rem;
+      margin-bottom: 36px;
+      max-width: 480px;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .hero-trust {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.82rem;
+    }
+
+    .hero-trust .avatars {
+      display: flex;
+    }
+
+    .hero-trust .avatars span {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: white;
+      margin-left: -8px;
+    }
+
+    .hero-trust .avatars span:first-child { margin-left: 0; }
+
+    /* Hero Visual */
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-card-main {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      padding: 32px;
+      color: white;
+    }
+
+    .hero-card-main .sch-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.07);
+      margin-bottom: 12px;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .hero-card-main .sch-item:hover { background: rgba(255,107,0,0.15); }
+    .hero-card-main .sch-item:last-child { margin-bottom: 0; }
+
+    .hero-card-main .sch-emoji {
+      font-size: 1.6rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .hero-card-main .sch-info h5 { color: white; font-size: 0.88rem; margin-bottom: 2px; }
+    .hero-card-main .sch-info p  { color: rgba(255,255,255,0.6); font-size: 0.75rem; }
+    .hero-card-main .sch-amount  { margin-left: auto; color: var(--gold-light); font-weight: 800; font-size: 0.92rem; white-space: nowrap; }
+
+    .hero-floating-badge {
+      position: absolute;
+      background: white;
+      border-radius: 14px;
+      padding: 12px 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .hero-floating-badge.badge-1 { top: -20px; right: 30px; animation-delay: 0s; }
+    .hero-floating-badge.badge-2 { bottom: -20px; left: 10px; animation-delay: 1.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    /* ─── Search Bar ─── */
+    .search-section {
+      padding: 0;
+      margin-top: -40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .search-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 36px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.14);
+    }
+
+    .search-bar {
+      display: grid;
+      grid-template-columns: 1fr 180px 180px auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .search-bar .form-group { margin-bottom: 0; }
+
+    /* ─── Stats Strip ─── */
+    .stats-section { background: var(--surface-2); padding: 60px 0; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    /* ─── How it Works ─── */
+    .how-section { background: white; }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .how-card {
+      text-align: center;
+      padding: 40px 28px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .how-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+    }
+
+    .how-card .step-num {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 36px;
+      background: var(--gradient);
+      border-radius: 50%;
+      color: white;
+      font-weight: 800;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(255,107,0,0.35);
+    }
+
+    .how-card .how-icon {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+    }
+
+    .how-card h3 { margin-bottom: 10px; font-size: 1.15rem; }
+
+    .how-card .connector {
+      display: none;
+    }
+
+    /* ─── Featured Scholarships ─── */
+    .featured-section { background: var(--surface-2); }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* ─── Eligibility CTA ─── */
+    .eligibility-cta {
+      background: var(--gradient-dark);
+      padding: 80px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .eligibility-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(255,107,0,0.25) 0%, transparent 60%);
+    }
+
+    .eligibility-cta .container {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .eligibility-cta h2 { color: white; margin-bottom: 14px; }
+    .eligibility-cta p  { color: rgba(255,255,255,0.72); max-width: 520px; }
+    .eligibility-cta .quiz-steps { display: flex; gap: 16px; margin-top: 24px; flex-wrap: wrap; }
+    .eligibility-cta .quiz-step { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+    .eligibility-cta .quiz-step .dot { width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: white; flex-shrink: 0; }
+
+    /* ─── Testimonials ─── */
+    .testimonials-section { background: white; }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .testimonial-card {
+      padding: 32px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-card);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border);
+    }
+
+    .testimonial-card .quote-icon {
+      font-size: 3rem;
+      color: var(--primary);
+      opacity: 0.2;
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-family: Georgia, serif;
+      line-height: 1;
+    }
+
+    .testimonial-card .stars { color: var(--gold); font-size: 1rem; margin-bottom: 14px; }
+    .testimonial-card .quote { font-size: 0.9rem; line-height: 1.8; margin-bottom: 20px; font-style: italic; }
+
+    .testimonial-card .author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .testimonial-card .avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--gradient);
+      color: white;
+      font-weight: 800;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .testimonial-card .author-info h5 { font-size: 0.9rem; margin-bottom: 2px; }
+    .testimonial-card .author-info small { font-size: 0.75rem; color: var(--text-muted); }
+    .testimonial-card .scholarship-tag { margin-left: auto; background: var(--surface-3); border: 1px solid var(--border); color: var(--primary); font-size: 0.7rem; padding: 3px 10px; border-radius: 50px; font-weight: 600; }
+
+    /* ─── Final CTA ─── */
+    .final-cta {
+      background: var(--gradient);
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .final-cta h2 { color: white; margin-bottom: 16px; }
+    .final-cta p  { color: rgba(255,255,255,0.85); margin-bottom: 36px; font-size: 1.1rem; }
+    .final-cta .cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1024px) {
+      .hero .container { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .search-bar { grid-template-columns: 1fr 1fr; }
+      .search-bar .btn { grid-column: 1 / -1; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-grid, .how-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .hero-content h1 { font-size: 2rem; }
+      .search-card { padding: 24px; }
+      .search-bar { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .featured-grid, .how-grid, .testimonials-grid { grid-template-columns: 1fr; }
+      .eligibility-cta .container { grid-template-columns: 1fr; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Page Loader -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+  <p style="color:var(--text-muted);font-size:0.85rem;margin-top:8px;">Loading opportunities...</p>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container"></div>
+
+<!-- ─── NAVBAR ─── -->
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo">
+      <div class="logo-icon">🎓</div>
+      Scholar<span>Bridge</span>
+    </a>
+
+    <ul class="navbar-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="scholarships.html">Scholarships</a></li>
+      <li><a href="eligibility.html">Check Eligibility</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+
+    <div class="navbar-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="navLoginBtn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="dashboard.html" class="btn btn-outline btn-sm" id="navDashBtn" style="display:none;">My Dashboard</a>
+      <button class="btn btn-ghost btn-sm" id="navLogoutBtn" style="display:none;" onclick="logout()">Logout</button>
+    </div>
+
+    <button class="nav-mobile-btn" id="navMobileBtn" aria-label="Toggle menu">☰</button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="scholarships.html">🏅 Scholarships</a>
+  <a href="eligibility.html">✅ Check Eligibility</a>
+  <a href="faq.html">❓ FAQ</a>
+  <a href="contact.html">📞 Contact</a>
+  <a href="dashboard.html">📊 Dashboard</a>
+  <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+  <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        🌟 Empowering Students Across India
+      </div>
+      <h1>Find the Right<br><span class="text-gradient">Scholarship</span><br>for Your Future</h1>
+      <p>ScholarBridge connects deserving students with government & private scholarships. Apply online, track status, and secure your education — all in one place.</p>
+      <div class="hero-actions">
+        <a href="scholarships.html" class="btn btn-primary btn-lg">
+          🔍 Browse Scholarships
+        </a>
+        <a href="eligibility.html" class="btn btn-white btn-lg">
+          ✅ Check Eligibility
+        </a>
+      </div>
+      <div class="hero-trust">
+        <div class="avatars">
+          <span style="background:#FF6B00;">R</span>
+          <span style="background:#1D4ED8;">P</span>
+          <span style="background:#15803D;">A</span>
+          <span style="background:#7E22CE;">S</span>
+        </div>
+        <span>Trusted by <strong style="color:white;">12,000+</strong> students across India</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-floating-badge badge-1">
+        🎉 ₹75,000 Approved! <span style="color:var(--primary);">National Merit</span>
+      </div>
+      <div class="hero-card-main">
+        <div style="color:rgba(255,255,255,0.6);font-size:0.78rem;font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px;">Featured Scholarships</div>
+        <div class="sch-item">
+          <div class="sch-emoji">🏛️</div>
+          <div class="sch-info">
+            <h5>National Merit Scholarship</h5>
+            <p>Government of India • Deadline: Oct 31</p>
+          </div>
+          <span class="sch-amount">₹75,000/yr</span>
+        </div>
+        <div class="sch-item">
+          <div class="sch-emoji">🔬</div>
+          <div class="sch-info">
+            <h5>INSPIRE Scholarship</h5>
+            <p>Dept. of Science & Technology • Nov 15</p>
+          </div>
+          <span class="sch-amount">₹60,000/yr</span>
+        </div>
+        <div class="sch-item">
+          <div class="sch-emoji">👩‍🎓</div>
+          <div class="sch-info">
+            <h5>Pragati Scholarship for Girls</h5>
+            <p>AICTE India • Oct 15</p>
+          </div>
+          <span class="sch-amount">₹30,000/yr</span>
+        </div>
+        <a href="scholarships.html" class="btn btn-white btn-sm btn-full" style="margin-top:16px;">View All Scholarships →</a>
+      </div>
+      <div class="hero-floating-badge badge-2">
+        📚 6 new scholarships added this week
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── QUICK SEARCH ─── -->
+<section class="search-section">
+  <div class="container">
+    <div class="search-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+        <h3 style="font-size:1.15rem;">🔍 Quick Scholarship Search</h3>
+        <span style="font-size:0.82rem;color:var(--text-muted);">Find from 200+ scholarships</span>
+      </div>
+      <div class="search-bar">
+        <div class="form-group">
+          <label class="form-label">Search</label>
+          <div class="input-group">
+            <span class="input-icon">🔍</span>
+            <input type="text" class="form-control" placeholder="e.g. Merit, SC/ST, Girls..." id="heroSearch" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-control" id="heroCategory">
+            <option value="">All Categories</option>
+            <option value="Merit">Merit-Based</option>
+            <option value="Reserved">Reserved Category</option>
+            <option value="Girls">Girls Only</option>
+            <option value="Science">Science</option>
+            <option value="Defence">Defence</option>
+            <option value="Regional">Regional</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Level</label>
+          <select class="form-control" id="heroLevel">
+            <option value="">All Levels</option>
+            <option value="school">School (8–12)</option>
+            <option value="undergraduate">Undergraduate</option>
+            <option value="postgraduate">Postgraduate</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="opacity:0;">Search</label>
+          <button class="btn btn-primary" id="heroSearchBtn" style="width:100%;">Search 🎯</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── STATS ─── -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card fade-in" data-count="200">
+        <div class="stat-icon">🏅</div>
+        <div class="stat-num">200</div>
+        <div class="stat-label">Scholarships Listed</div>
+      </div>
+      <div class="stat-card fade-in" data-count="10000">
+        <div class="stat-icon">🎓</div>
+        <div class="stat-num">12,000</div>
+        <div class="stat-label">Students Registered</div>
+      </div>
+      <div class="stat-card fade-in" data-count="4800">
+        <div class="stat-icon">✅</div>
+        <div class="stat-num">4,800</div>
+        <div class="stat-label">Applications Approved</div>
+      </div>
+      <div class="stat-card fade-in" data-count="25">
+        <div class="stat-icon">💰</div>
+        <div class="stat-num">₹25</div>
+        <div class="stat-label">Crore+ Disbursed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section class="section how-section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="tag">How it Works</div>
+      <h2>Apply in 4 Simple Steps</h2>
+      <p>Our streamlined process makes it easy to find and apply for the right scholarship — no complexity, no confusion.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card fade-in">
+        <div class="step-num">1</div>
+        <div class="how-icon">📝</div>
+        <h3>Create Your Profile</h3>
+        <p>Sign up and fill your academic and personal details. It takes only 5 minutes and unlocks access to all scholarships.</p>
+      </div>
+      <div class="how-card fade-in" style="transition-delay:0.1s;">
+        <div class="step-num">2</div>
+        <div class="how-icon">✅</div>
+        <h3>Check Eligibility</h3>
+        <p>Use our smart eligibility checker to discover scholarships you qualify for — personalized to your profile and needs.</p>
+      </div>
+      <div class="how-card fade-in" style="transition-delay:0.2s;">
+        <div class="step-num">3</div>
+        <div class="how-icon">📤</div>
+        <h3>Apply Online</h3>
+        <p>Fill the application form, upload required documents, and submit — all from the comfort of your home.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:40px;" class="fade-in">
+      <a href="register.html" class="btn btn-primary btn-lg">Start Your Journey →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURED SCHOLARSHIPS ─── -->
+<section class="section featured-section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="tag">Top Opportunities</div>
+      <h2>Featured Scholarships</h2>
+      <p>Handpicked scholarships with approaching deadlines — don't miss out!</p>
+    </div>
+    <div class="featured-grid" id="featuredGrid">
+      <!-- Rendered by JS -->
+    </div>
+    <div style="text-align:center;margin-top:40px;" class="fade-in">
+      <a href="scholarships.html" class="btn btn-outline btn-lg">View All 200+ Scholarships →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ELIGIBILITY CTA ─── -->
+<section class="eligibility-cta">
+  <div class="container">
+    <div class="fade-in-left">
+      <h2>Not Sure Which Scholarship<br>You Qualify For?</h2>
+      <p>Take our 2-minute eligibility quiz and we'll show you a personalized list of scholarships you're eligible to apply for right now.</p>
+      <div class="quiz-steps">
+        <div class="quiz-step"><div class="dot">1</div> Answer 8 quick questions</div>
+        <div class="quiz-step"><div class="dot">2</div> Get matched scholarships</div>
+        <div class="quiz-step"><div class="dot">3</div> Apply instantly</div>
+      </div>
+    </div>
+    <div class="fade-in-right">
+      <a href="eligibility.html" class="btn btn-white btn-lg">
+        🎯 Take Eligibility Quiz
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TESTIMONIALS ─── -->
+<section class="section testimonials-section">
+  <div class="container">
+    <div class="section-header fade-in">
+      <div class="tag">Success Stories</div>
+      <h2>Students Who Changed Their Lives</h2>
+      <p>Real stories from students whose education was transformed by scholarships found through ScholarBridge.</p>
+    </div>
+    <div class="testimonials-grid" id="testimonialsGrid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ─── FINAL CTA ─── -->
+<section class="final-cta">
+  <div class="container fade-in">
+    <h2>Your Education Deserves Support 🎓</h2>
+    <p>Join 10,000+ students already using ScholarBridge to fund their education dreams.</p>
+    <div class="cta-actions">
+      <a href="register.html" class="btn btn-white btn-lg">Create Free Account</a>
+      <a href="scholarships.html" class="btn btn-outline btn-lg" style="border-color:rgba(255,255,255,0.5);color:white;">Browse Scholarships</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><div class="logo-icon">🎓</div> ScholarBridge</div>
+        <p class="footer-desc">Empowering students from all backgrounds to access education funding and achieve their academic dreams.</p>
+        <div class="social-links" style="margin-top:20px;">
+          <a href="#" aria-label="Facebook">📘</a>
+          <a href="#" aria-label="Twitter">🐦</a>
+          <a href="https://www.instagram.com/drax7.exe/" aria-label="Instagram">📸</a>
+          <a href="https://youtube.com/@dysgaming256?si=aeZ0lX26dRg4TvEO" aria-label="YouTube">▶️</a>
+        </div>
+      </div>
+      <div>
+        <h5>Scholarships</h5>
+        <ul class="footer-links">
+          <li><a href="scholarships.html">Browse All</a></li>
+          <li><a href="scholarships.html?cat=Merit">Merit-Based</a></li>
+          <li><a href="scholarships.html?cat=Girls">For Girls</a></li>
+          <li><a href="scholarships.html?cat=Reserved">SC/ST/OBC</a></li>
+          <li><a href="scholarships.html?cat=Science">Science</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Platform</h5>
+        <ul class="footer-links">
+          <li><a href="eligibility.html">Check Eligibility</a></li>
+          <li><a href="dashboard.html">My Applications</a></li>
+          <li><a href="profile.html">My Profile</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="contact.html">Get Help</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Community</h5>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Success Stories</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 ScholarBridge. Made with ❤️ to empower students across India.</p>
+      <p style="font-size:0.78rem;color:rgba(255,255,255,0.4);">Scholarship Assistance</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+  // Hero search redirect
+  document.getElementById('heroSearchBtn').addEventListener('click', () => {
+    const q   = document.getElementById('heroSearch').value;
+    const cat = document.getElementById('heroCategory').value;
+    const lev = document.getElementById('heroLevel').value;
+    const params = new URLSearchParams();
+    if (q)   params.set('q', q);
+    if (cat) params.set('cat', cat);
+    if (lev) params.set('level', lev);
+    window.location.href = `scholarships.html?${params.toString()}`;
+  });
+
+  document.getElementById('heroSearch').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('heroSearchBtn').click();
+  });
+
+  // Render featured scholarships
+  document.addEventListener('DOMContentLoaded', () => {
+    const featured = AppState.scholarships.filter(s => s.featured);
+    document.getElementById('featuredGrid').innerHTML =
+      featured.map(s => createScholarshipCard(s)).join('');
+
+    // Render testimonials
+    document.getElementById('testimonialsGrid').innerHTML =
+      AppState.testimonials.map((t, i) => `
+        <div class="testimonial-card fade-in" style="transition-delay:${i * 0.1}s;">
+          <div class="quote-icon">"</div>
+          <div class="stars">${'⭐'.repeat(t.stars)}</div>
+          <p class="quote">"${t.quote}"</p>
+          <div class="author">
+            <div class="avatar">${t.photo}</div>
+            <div class="author-info">
+              <h5>${t.name}</h5>
+              <small>${t.course}</small>
+            </div>
+            <div class="scholarship-tag">${t.amount}</div>
+          </div>
+        </div>`).join('');
+
+    initScrollAnimations();
+  });
+</script>
+</body>
+</html>

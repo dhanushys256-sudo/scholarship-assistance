@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse Scholarships — ScholarBridge</title>
+  <meta name="description" content="Browse 200+ government and private scholarships. Filter by category, level, amount, and deadline to find the right scholarship for you." />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .sch-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+      padding: 40px 0;
+    }
+
+    /* Filter Sidebar */
+    .filter-sidebar {
+      position: sticky;
+      top: calc(var(--nav-height) + 20px);
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+      align-self: start;
+    }
+
+    .filter-sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-2);
+    }
+
+    .filter-sidebar-header h4 { font-size: 0.95rem; }
+
+    .filter-section { padding: 20px; border-bottom: 1px solid var(--border-light); }
+    .filter-section:last-child { border-bottom: none; }
+    .filter-section h5 { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 14px; }
+
+    .filter-chip-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter-chip {
+      padding: 5px 12px; border-radius: 50px; border: 1.5px solid var(--border-light);
+      font-size: 0.78rem; font-weight: 600; color: var(--text-secondary);
+      cursor: pointer; transition: var(--transition-fast);
+    }
+    .filter-chip:hover, .filter-chip.active {
+      border-color: var(--primary); color: var(--primary);
+      background: rgba(255,107,0,0.07);
+    }
+
+    .range-display { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); margin-top: 6px; }
+
+    input[type="range"] {
+      width: 100%; accent-color: var(--primary);
+      margin: 6px 0;
+    }
+
+    /* Results Area */
+    .sch-results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .sch-search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .sch-search-bar .input-group { flex: 1; min-width: 220px; }
+
+    .sch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* Active Filters */
+    .active-filters {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      margin-bottom: 16px;
+    }
+    .active-filters .filter-tag {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(255,107,0,0.1); border: 1px solid rgba(255,107,0,0.2);
+      color: var(--primary); font-size: 0.78rem; font-weight: 600;
+      padding: 4px 12px; border-radius: 50px;
+    }
+    .active-filters .filter-tag button {
+      background: none; border: none; cursor: pointer;
+      color: var(--primary); font-size: 0.9rem; line-height: 1;
+    }
+
+    @media (max-width: 1024px) {
+      .sch-layout { grid-template-columns: 1fr; }
+      .filter-sidebar { position: static; display: none; }
+      .filter-sidebar.mobile-open { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+<div class="toast-container"></div>
+
+<!-- Navbar -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="navbar-logo">
+      <div class="logo-icon">🎓</div>
+      Scholar<span>Bridge</span>
+    </a>
+    <ul class="navbar-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="scholarships.html" class="active">Scholarships</a></li>
+      <li><a href="eligibility.html">Check Eligibility</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm" id="navLoginBtn">Login</a>
+      <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+      <a href="dashboard.html" class="btn btn-outline btn-sm" id="navDashBtn" style="display:none;">My Dashboard</a>
+      <button class="btn btn-ghost btn-sm" id="navLogoutBtn" style="display:none;" onclick="logout()">Logout</button>
+    </div>
+    <button class="nav-mobile-btn" id="navMobileBtn">☰</button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="scholarships.html">🏅 Scholarships</a>
+  <a href="eligibility.html">✅ Eligibility</a>
+  <a href="dashboard.html">📊 Dashboard</a>
+  <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+</div>
+
+<!-- Hero -->
+<div class="page-hero">
+  <div class="container">
+    <h1>Browse All Scholarships 🏅</h1>
+    <p>Explore 200+ scholarships from government bodies, NGOs, and private institutions — filtered just for you.</p>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="sch-layout">
+
+    <!-- Filter Sidebar -->
+    <aside class="filter-sidebar" id="filterSidebar">
+      <div class="filter-sidebar-header">
+        <h4>🎛️ Filters</h4>
+        <button class="btn btn-ghost btn-sm" onclick="resetFilters()">Reset All</button>
+      </div>
+
+      <div class="filter-section">
+        <h5>Category</h5>
+        <div class="filter-chip-group">
+          <div class="filter-chip active" data-filter="category" data-val="">All</div>
+          <div class="filter-chip" data-filter="category" data-val="Merit">Merit</div>
+          <div class="filter-chip" data-filter="category" data-val="Reserved">SC/ST/OBC</div>
+          <div class="filter-chip" data-filter="category" data-val="Girls">Girls</div>
+          <div class="filter-chip" data-filter="category" data-val="Science">Science</div>
+          <div class="filter-chip" data-filter="category" data-val="Defence">Defence</div>
+          <div class="filter-chip" data-filter="category" data-val="Regional">Regional</div>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <h5>Education Level</h5>
+        <div class="filter-chip-group">
+          <div class="filter-chip active" data-filter="level" data-val="">All</div>
+          <div class="filter-chip" data-filter="level" data-val="school">School</div>
+          <div class="filter-chip" data-filter="level" data-val="undergraduate">UG</div>
+          <div class="filter-chip" data-filter="level" data-val="postgraduate">PG</div>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <h5>Minimum Amount (₹/year)</h5>
+        <input type="range" id="amountRange" min="0" max="100000" step="5000" value="0" oninput="updateAmountDisplay(this.value)" />
+        <div class="range-display">
+          <span>₹0</span>
+          <span id="amountDisplay" style="color:var(--primary);font-weight:600;">Any Amount</span>
+          <span>₹1L+</span>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <h5>Sort By</h5>
+        <select class="form-control form-control-sm" id="schSort" style="font-size:0.85rem;padding:8px 12px;">
+          <option value="deadline">Deadline (Soonest)</option>
+          <option value="amount_desc">Amount (High to Low)</option>
+          <option value="amount_asc">Amount (Low to High)</option>
+        </select>
+      </div>
+    </aside>
+
+    <!-- Results -->
+    <div>
+      <div class="sch-search-bar">
+        <div class="input-group" style="flex:1;">
+          <span class="input-icon">🔍</span>
+          <input type="text" class="form-control" id="schSearch" placeholder="Search scholarships, organizations..." />
+        </div>
+        <select class="form-control" id="schCategory" style="display:none;"></select>
+        <select class="form-control" id="schLevel" style="display:none;"></select>
+        <button class="btn btn-ghost btn-sm" id="mobileFilterBtn" style="display:none;" onclick="toggleMobileFilter()">⚙️ Filters</button>
+      </div>
+
+      <div class="active-filters" id="activeFilters"></div>
+
+      <div class="sch-results-header">
+        <span id="schCount" style="font-weight:600;color:var(--text-primary);"></span>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span style="font-size:0.82rem;color:var(--text-muted);">Sort:</span>
+          <select class="form-control" id="schSortMobile" style="font-size:0.82rem;padding:7px 12px;width:auto;" onchange="document.getElementById('schSort').value=this.value;applyFiltersManual()">
+            <option value="deadline">Deadline</option>
+            <option value="amount_desc">Amount ↓</option>
+            <option value="amount_asc">Amount ↑</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sch-grid" id="schGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer" style="margin-top:60px;">
+  <div class="container">
+    <div class="footer-bottom" style="border-top:none;padding-top:0;">
+      <p>© 2026 ScholarBridge — Scholarship Assistance Community Project</p>
+      <div style="display:flex;gap:20px;">
+        <a href="index.html" style="color:rgba(255,255,255,0.6);font-size:0.85rem;">Home</a>
+        <a href="faq.html" style="color:rgba(255,255,255,0.6);font-size:0.85rem;">FAQ</a>
+        <a href="contact.html" style="color:rgba(255,255,255,0.6);font-size:0.85rem;">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/app.js"></script>
+<script src="js/chatbot.js"></script>
+<script>
+  // Chip filters
+  let activeChipFilters = { category: '', level: '' };
+
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const filter = chip.dataset.filter;
+      const val    = chip.dataset.val;
+      activeChipFilters[filter] = val;
+      document.querySelectorAll(`.filter-chip[data-filter="${filter}"]`).forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+
+      // Sync hidden selects
+      if (filter === 'category') {
+        const sel = document.getElementById('schCategory');
+        if (sel) sel.value = val;
+      }
+      if (filter === 'level') {
+        const sel = document.getElementById('schLevel');
+        if (sel) sel.value = val;
+      }
+      applyFiltersManual();
+      updateActiveFilterTags();
+    });
+  });
+
+  document.getElementById('schSort').addEventListener('change', applyFiltersManual);
+  document.getElementById('amountRange').addEventListener('input', applyFiltersManual);
+
+  function updateAmountDisplay(val) {
+    const el = document.getElementById('amountDisplay');
+    el.textContent = val == 0 ? 'Any Amount' : '₹' + Number(val).toLocaleString('en-IN') + '+';
+  }
+
+  function applyFiltersManual() {
+    const q     = document.getElementById('schSearch').value.toLowerCase();
+    const cat   = activeChipFilters.category;
+    const lev   = activeChipFilters.level;
+    const sort  = document.getElementById('schSort').value;
+    const minAmt = parseInt(document.getElementById('amountRange').value) || 0;
+    const grid  = document.getElementById('schGrid');
+    const countEl = document.getElementById('schCount');
+
+    let data = AppState.scholarships.filter(s => {
+      return (!q   || s.title.toLowerCase().includes(q) || s.organization.toLowerCase().includes(q)) &&
+             (!cat || s.category === cat) &&
+             (!lev || s.level.includes(lev)) &&
+             (s.amount >= minAmt);
+    });
+
+    if (sort === 'amount_desc') data.sort((a,b) => b.amount - a.amount);
+    else if (sort === 'amount_asc') data.sort((a,b) => a.amount - b.amount);
+    else data.sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+
+    if (countEl) countEl.textContent = `${data.length} Scholarships Found`;
+
+    if (data.length === 0) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-icon">🔍</div>
+        <h3>No Scholarships Found</h3>
+        <p>Try adjusting your filters or search term.</p>
+        <button class="btn btn-outline" onclick="clearAll()">Clear All Filters</button>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = data.map(s => createScholarshipCard(s)).join('');
+    initScrollAnimations();
+  }
+
+  function clearAll() {
+    document.getElementById('schSearch').value = '';
+    document.getElementById('amountRange').value = 0;
+    updateAmountDisplay(0);
+    activeChipFilters = { category: '', level: '' };
+    document.querySelectorAll('.filter-chip').forEach(c => {
+      c.classList.toggle('active', c.dataset.val === '');
+    });
+    applyFiltersManual();
+    updateActiveFilterTags();
+  }
+
+  window.resetFilters = clearAll;
+
+  function updateActiveFilterTags() {
+    const container = document.getElementById('activeFilters');
+    const tags = [];
+    if (activeChipFilters.category) tags.push({ label: activeChipFilters.category, key: 'category' });
+    if (activeChipFilters.level)    tags.push({ label: activeChipFilters.level,    key: 'level' });
+    container.innerHTML = tags.map(t => `
+      <div class="filter-tag">${t.label}
+        <button onclick="removeFilter('${t.key}')">✕</button>
+      </div>`).join('');
+  }
+
+  window.removeFilter = (key) => {
+    activeChipFilters[key] = '';
+    document.querySelectorAll(`.filter-chip[data-filter="${key}"]`).forEach(c => {
+      c.classList.toggle('active', c.dataset.val === '');
+    });
+    applyFiltersManual();
+    updateActiveFilterTags();
+  };
+
+  function toggleMobileFilter() {
+    document.getElementById('filterSidebar').classList.toggle('mobile-open');
+  }
+
+  // Check URL params
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('q'))   document.getElementById('schSearch').value = params.get('q');
+  if (params.get('cat')) {
+    activeChipFilters.category = params.get('cat');
+    document.querySelectorAll(`.filter-chip[data-filter="category"]`).forEach(c => {
+      c.classList.toggle('active', c.dataset.val === params.get('cat'));
+    });
+  }
+  if (params.get('level')) {
+    activeChipFilters.level = params.get('level');
+    document.querySelectorAll(`.filter-chip[data-filter="level"]`).forEach(c => {
+      c.classList.toggle('active', c.dataset.val === params.get('level'));
+    });
+  }
+
+  // Mobile filter btn
+  if (window.innerWidth < 1024) {
+    document.getElementById('mobileFilterBtn').style.display = 'inline-flex';
+  }
+
+  document.getElementById('schSearch').addEventListener('input', applyFiltersManual);
+
+  // Initial render
+  applyFiltersManual();
+</script>
+</body>
+</html>

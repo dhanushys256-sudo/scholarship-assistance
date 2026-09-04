@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — ScholarBridge</title>
+  <meta name="description"
+    content="Administrator panel for managing scholarships, applications, and student records." />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body {
+      background: var(--surface-2);
+    }
+
+    .admin-page {
+      padding: calc(var(--nav-height) + 24px) 0 60px;
+    }
+
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Admin Sidebar */
+    .admin-sidebar {
+      background: var(--gradient-dark);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: sticky;
+      top: calc(var(--nav-height) + 20px);
+    }
+
+    .admin-sidebar .admin-brand {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .admin-brand .admin-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .admin-sidebar nav {
+      padding: 12px;
+    }
+
+    .admin-sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.65);
+      transition: var(--transition-fast);
+      margin-bottom: 2px;
+    }
+
+    .admin-sidebar nav a:hover,
+    .admin-sidebar nav a.active {
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+    }
+
+    .admin-sidebar nav a i {
+      width: 18px;
+      text-align: center;
+    }
+
+    .admin-badge {
+      margin-left: auto;
+      background: var(--primary);
+      color: white;
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      border-radius: 50px;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: 22px;
+      border: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: var(--transition);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .kpi-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .kpi-label {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .kpi-trend {
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    .trend-up {
+      color: #22C55E;
+    }
+
+    .trend-down {
+      color: var(--accent);
+    }
+
+    /* Tabs */
+    .admin-tabs {
+      display: flex;
+      gap: 4px;
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      border: 1px solid var(--border-light);
+      margin-bottom: 20px;
+      width: fit-content;
+    }
+
+    .admin-tab {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      color: var(--text-muted);
+    }
+
+    .admin-tab.active {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 2px 8px rgba(255, 107, 0, 0.3);
+    }
+
+    /* Status badge */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .status-pending {
+      background: rgba(234, 179, 8, 0.12);
+      color: #92400E;
+    }
+
+    .status-review {
+      background: rgba(59, 130, 246, 0.12);
+      color: #1D4ED8;
+    }
+
+    .status-approved {
+      background: rgba(34, 197, 94, 0.12);
+      color: #15803D;
+    }
+
+    .status-rejected {
+      background: rgba(239, 68, 68, 0.12);
+      color: #B91C1C;
+    }
+
+    /* Action buttons */
+    .action-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* Chart area (visual only) */
+    .chart-card {
+      background: white;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-light);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .chart-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      height: 120px;
+      margin-top: 16px;
+    }
+
+    .chart-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chart-bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: var(--gradient);
+      min-height: 4px;
+      transition: height 0.8s ease;
+    }
+
+    .chart-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 1024px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-sidebar {
+        position: static;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-logo text-gradient">🎓 Admin</div>
+    <div class="loader-bar">
+      <div class="loader-bar-fill"></div>
+    </div>
+  </div>
+  <div class="toast-container"></div>
+
+  <nav class="navbar scrolled" id="navbar">
+    <div class="navbar-inner">
+      <a href="../index.html" class="navbar-logo">
+        <div class="logo-icon">🎓</div>Scholar<span>Bridge</span>
+      </a>
+      <div style="flex:1;"></div>
+      <span class="badge badge-red" style="margin-right:8px;">Admin Panel</span>
+      <a href="../index.html" class="btn btn-ghost btn-sm">← Back to Site</a>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">Logout</button>
+      <button class="nav-mobile-btn" id="navMobileBtn">☰</button>
+    </div>
+  </nav>
+
+  <div class="admin-page">
+    <div class="container">
+      <div class="admin-layout">
+
+        <!-- Admin Sidebar -->
+        <div class="admin-sidebar">
+          <div class="admin-brand">
+            <div class="admin-icon">⚙️</div>
+            Admin Panel
+          </div>
+          <nav>
+            <a href="#overview" class="active"><i>📊</i> Overview</a>
+            <a href="#applications"><i>📝</i> Applications <span class="admin-badge">12</span></a>
+            <a href="#scholarships"><i>🏅</i> Scholarships</a>
+            <a href="#students"><i>👥</i> Students</a>
+            <a href="#tickets" onclick="switchTab('tickets', document.getElementById('tabBtnTickets'))"><i>📩</i>
+              Support Tickets</a>
+            <a href="#reports"><i>📈</i> Reports</a>
+            <a href="#settings"><i>⚙️</i> Settings</a>
+            <a href="../index.html"
+              style="margin-top:16px;border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;"><i>🌐</i> View Live
+              Site</a>
+          </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div>
+          <!-- Header -->
+          <div
+            style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+            <div>
+              <h2>Admin Dashboard</h2>
+              <p>Welcome back, Admin. Here's your scholarship platform overview.</p>
+            </div>
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-outline btn-sm" onclick="showToast('Generating report...','info')">📊 Export
+                Report</button>
+              <button class="btn btn-primary btn-sm"
+                onclick="document.getElementById('addScholarshipModal').classList.add('open')">+ Add
+                Scholarship</button>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card fade-in">
+              <div class="kpi-icon" style="background:rgba(255,107,0,0.1);">📝</div>
+              <div>
+                <div class="kpi-val">247</div>
+                <div class="kpi-label">Total Applications</div>
+                <div class="kpi-trend trend-up">↑ 18% this month</div>
+              </div>
+            </div>
+            <div class="kpi-card fade-in" style="transition-delay:0.1s;">
+              <div class="kpi-icon" style="background:rgba(34,197,94,0.1);">✅</div>
+              <div>
+                <div class="kpi-val">89</div>
+                <div class="kpi-label">Approved</div>
+                <div class="kpi-trend trend-up">↑ 12 this week</div>
+              </div>
+            </div>
+            <div class="kpi-card fade-in" style="transition-delay:0.2s;">
+              <div class="kpi-icon" style="background:rgba(59,130,246,0.1);">🔄</div>
+              <div>
+                <div class="kpi-val">124</div>
+                <div class="kpi-label">Under Review</div>
+                <div class="kpi-trend" style="color:var(--text-muted);">Needs action</div>
+              </div>
+            </div>
+            <div class="kpi-card fade-in" style="transition-delay:0.3s;">
+              <div class="kpi-icon" style="background:rgba(255,184,0,0.1);">👥</div>
+              <div>
+                <div class="kpi-val">1,842</div>
+                <div class="kpi-label">Registered Students</div>
+                <div class="kpi-trend trend-up">↑ 42 today</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="chart-card fade-in">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <h3 style="font-size:1rem;">📈 Applications per Month (2026)</h3>
+              <span class="badge badge-green">Live Data</span>
+            </div>
+            <div class="chart-bars" id="chartBars">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="admin-tabs">
+            <div class="admin-tab active" onclick="switchTab('applications', this)">📝 Applications (12 pending)</div>
+            <div class="admin-tab" onclick="switchTab('scholarships', this)">🏅 Scholarships</div>
+            <div class="admin-tab" onclick="switchTab('students', this)">👥 Students</div>
+            <div class="admin-tab" id="tabBtnTickets" onclick="switchTab('tickets', this)">📩 Support Tickets <span
+                id="tabTicketBadge" class="badge badge-gold" style="font-size:0.7rem;padding:2px 6px;">0</span></div>
+          </div>
+
+          <!-- Applications Table -->
+          <div id="tab-applications">
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+              <div class="input-group" style="width:280px;">
+                <span class="input-icon">🔍</span>
+                <input type="text" class="form-control" placeholder="Search applicants..." id="adminSearch"
+                  oninput="filterApplications(this.value)" />
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <select class="form-control" style="width:auto;font-size:0.82rem;padding:8px 12px;" id="statusFilter"
+                  onchange="filterApplications('')">
+                  <option value="">All Status</option>
+                  <option value="pending">Pending</option>
+                  <option value="under_review">Under Review</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table id="applicationsTable">
+                <thead>
+                  <tr>
+                    <th>Applicant</th>
+                    <th>Scholarship</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="applicationsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Scholarships Table -->
+          <div id="tab-scholarships" style="display:none;">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Scholarship</th>
+                    <th>Organization</th>
+                    <th>Amount</th>
+                    <th>Deadline</th>
+                    <th>Applications</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="scholarshipsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Students Table -->
+          <div id="tab-students" style="display:none;">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Email</th>
+                    <th>Category</th>
+                    <th>Applications</th>
+                    <th>Joined</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="studentsBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Support Tickets Table -->
+          <div id="tab-tickets" style="display:none;">
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+              <div class="input-group" style="width:280px;">
+                <span class="input-icon">🔍</span>
+                <input type="text" class="form-control" placeholder="Search tickets by ID or name..." id="ticketSearch"
+                  oninput="filterTickets(this.value)" />
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <select class="form-control" style="width:auto;font-size:0.82rem;padding:8px 12px;"
+                  id="ticketTypeFilter" onchange="filterTickets('')">
+                  <option value="">All Categories</option>
+                  <option value="Scholarship Help">Scholarship Help</option>
+                  <option value="Application Issue">Application Issue</option>
+                  <option value="Eligibility Query">Eligibility</option>
+                  <option value="Technical Problem">Technical</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select class="form-control" style="width:auto;font-size:0.82rem;padding:8px 12px;"
+                  id="ticketStatusFilter" onchange="filterTickets('')">
+                  <option value="">All Statuses</option>
+                  <option value="new">New (Unassigned)</option>
+                  <option value="in_progress">Advisor Assigned</option>
+                  <option value="resolved">Resolved</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ticket Ref</th>
+                    <th>Applicant</th>
+                    <th>Subject</th>
+                    <th>Query Category</th>
+                    <th>Received</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ticketsBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Scholarship Modal -->
+  <div class="modal-overlay" id="addScholarshipModal">
+    <div class="modal" style="max-width:560px;">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin-bottom:4px;">+ Add New Scholarship</h3>
+          <p style="font-size:0.85rem;color:var(--text-muted);">Fill in the scholarship details below.</p>
+        </div>
+        <button class="modal-close"
+          onclick="document.getElementById('addScholarshipModal').classList.remove('open')">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label">Scholarship Title <span class="required">*</span></label>
+          <input type="text" class="form-control" placeholder="e.g. National Merit Scholarship" id="newSchTitle" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Organization <span class="required">*</span></label>
+          <input type="text" class="form-control" placeholder="Awarding body" id="newSchOrg" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Annual Amount (₹) <span class="required">*</span></label>
+          <input type="number" class="form-control" placeholder="75000" id="newSchAmount" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-control" id="newSchCat">
+            <option>Merit</option>
+            <option>Reserved</option>
+            <option>Girls</option>
+            <option>Science</option>
+            <option>Defence</option>
+            <option>Regional</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Application Deadline</label>
+          <input type="date" class="form-control" id="newSchDeadline" />
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" rows="3" placeholder="Brief description of the scholarship..."
+            id="newSchDesc"></textarea>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
+        <button class="btn btn-ghost"
+          onclick="document.getElementById('addScholarshipModal').classList.remove('open')">Cancel</button>
+        <button class="btn btn-primary" onclick="addScholarship()">Add Scholarship</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/app.js"></script>
+  <script>
+    // Mock application data for admin
+    const mockApplications = [
+      { name: 'Ravi Kumar', email: 'ravi@ex.com', scholarship: 'National Merit Scholarship', date: '2026-08-10', status: 'under_review', amount: 75000 },
+      { name: 'Priya Sharma', email: 'priya@ex.com', scholarship: 'INSPIRE Scholarship', date: '2026-07-22', status: 'approved', amount: 60000 },
+      { name: 'Anjali Nair', email: 'anjali@ex.com', scholarship: 'Pragati Scholarship', date: '2026-09-01', status: 'pending', amount: 30000 },
+      { name: 'Suresh Patel', email: 'suresh@ex.com', scholarship: 'National Merit Scholarship', date: '2026-08-28', status: 'pending', amount: 75000 },
+      { name: 'Meena Reddy', email: 'meena@ex.com', scholarship: 'Pre-Matric SC/ST', date: '2026-08-15', status: 'approved', amount: 25000 },
+      { name: 'Arjun Singh', email: 'arjun@ex.com', scholarship: 'INSPIRE Scholarship', date: '2026-08-20', status: 'rejected', amount: 60000 },
+      { name: 'Kavita Joshi', email: 'kavita@ex.com', scholarship: 'Pragati Scholarship', date: '2026-09-01', status: 'under_review', amount: 30000 },
+      { name: 'Rohit Das', email: 'rohit@ex.com', scholarship: 'PM Scholarship CAPF', date: '2026-08-05', status: 'approved', amount: 36000 },
+    ];
+
+    const statusClasses = { pending: 'status-pending', under_review: 'status-review', approved: 'status-approved', rejected: 'status-rejected' };
+    const statusLabels = { pending: '🟡 Pending', under_review: '🔵 Under Review', approved: '✅ Approved', rejected: '❌ Rejected' };
+
+    function renderApplications(data) {
+      document.getElementById('applicationsBody').innerHTML = data.map((app, i) => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--gradient);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;flex-shrink:0;">${app.name.charAt(0)}</div>
+          <div>
+            <strong>${app.name}</strong>
+            <div style="font-size:0.75rem;color:var(--text-muted);">${app.email}</div>
+          </div>
+        </div>
+      </td>
+      <td style="font-size:0.83rem;">${app.scholarship}</td>
+      <td style="font-size:0.82rem;color:var(--text-muted);">${app.date}</td>
+      <td><span class="status-pill ${statusClasses[app.status]}">${statusLabels[app.status]}</span></td>
+      <td style="font-weight:700;color:var(--primary);">₹${Number(app.amount).toLocaleString('en-IN')}</td>
+      <td>
+        <div class="action-btns">
+          <button class="btn btn-primary btn-sm" onclick="updateStatus(${i},'approved')">✅</button>
+          <button class="btn btn-ghost btn-sm" style="color:var(--accent);" onclick="updateStatus(${i},'rejected')">❌</button>
+          <button class="btn btn-ghost btn-sm" onclick="showToast('View full application coming soon','info')">👁️</button>
+        </div>
+      </td>
+    </tr>`).join('');
+    }
+
+    window.updateStatus = (i, status) => {
+      mockApplications[i].status = status;
+      filterApplications('');
+      showToast(`Application ${status === 'approved' ? 'approved ✅' : 'rejected ❌'}`, status === 'approved' ? 'success' : 'error');
+    };
+
+    function filterApplications(q) {
+      const sf = document.getElementById('statusFilter').value;
+      const filtered = mockApplications.filter(a =>
+        (!q || a.name.toLowerCase().includes(q.toLowerCase()) || a.scholarship.toLowerCase().includes(q.toLowerCase())) &&
+        (!sf || a.status === sf)
+      );
+      renderApplications(filtered);
+    }
+
+    function renderScholarships() {
+      document.getElementById('scholarshipsBody').innerHTML = AppState.scholarships.map(s => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:34px;height:34px;border-radius:10px;background:${s.orgColor};display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">${s.orgEmoji}</div>
+          <strong style="font-size:0.88rem;">${s.title}</strong>
+        </div>
+      </td>
+      <td style="font-size:0.82rem;">${s.organization}</td>
+      <td style="font-weight:700;color:var(--primary);">${s.amountDisplay}</td>
+      <td style="font-size:0.82rem;color:var(--accent);">${s.deadlineDisplay}</td>
+      <td><div class="progress-bar" style="width:100px;display:inline-block;"><div class="progress-fill" style="width:${Math.round(s.applied / s.seats * 100)}%;"></div></div> <span style="font-size:0.75rem;color:var(--text-muted);">${s.applied}/${s.seats}</span></td>
+      <td>
+        <div class="action-btns">
+          <button class="btn btn-outline btn-sm" onclick="showToast('Edit mode — coming soon','info')">✏️</button>
+          <button class="btn btn-ghost btn-sm" style="color:var(--accent);" onclick="showToast('Scholarship deleted (demo)','error')">🗑️</button>
+        </div>
+      </td>
+    </tr>`).join('');
+    }
+
+    function renderStudents() {
+      const students = Array.from({ length: 8 }, (_, i) => ({
+        name: ['Ravi Kumar', 'Priya Sharma', 'Anjali Nair', 'Rohit Das', 'Meena Reddy', 'Suresh Patel', 'Kavita Joshi', 'Arjun Singh'][i],
+        email: ['ravi', 'priya', 'anjali', 'rohit', 'meena', 'suresh', 'kavita', 'arjun'][i] + '@example.com',
+        cat: ['OBC', 'General', 'SC', 'General', 'ST', 'OBC', 'EWS', 'SC'][i],
+        apps: [3, 1, 2, 1, 1, 1, 1, 2][i],
+        joined: '2026-0' + (i + 1) + '-01'
+      }));
+      document.getElementById('studentsBody').innerHTML = students.map(s => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--gradient);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;">${s.name.charAt(0)}</div>
+          <strong>${s.name}</strong>
+        </div>
+      </td>
+      <td style="font-size:0.82rem;color:var(--text-muted);">${s.email}</td>
+      <td><span class="badge badge-blue">${s.cat}</span></td>
+      <td style="text-align:center;font-weight:700;">${s.apps}</td>
+      <td style="font-size:0.82rem;color:var(--text-muted);">${s.joined}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="showToast('View profile — coming soon','info')">👁️ View</button></td>
+    </tr>`).join('');
+    }
+
+    function switchTab(tab, btn) {
+      ['applications', 'scholarships', 'students', 'tickets'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.style.display = t === tab ? 'block' : 'none';
+      });
+      document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      if (tab === 'tickets') renderTickets();
+    }
+
+    function getAdminTickets() {
+      const storageKey = 'scholarbridge_contact_messages';
+      let messages = [];
+      try {
+        messages = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      } catch (e) {
+        messages = [];
+      }
+      if (messages.length === 0) {
+        messages = [
+          {
+            ticketId: 'SCH-2026-4821',
+            name: 'Aditya Rao',
+            email: 'aditya.rao@example.com',
+            subject: 'Query on Income Certificate validity',
+            queryType: 'Scholarship Help',
+            status: 'new',
+            createdAt: '2026-09-02T10:30:00Z',
+            message: 'Is a digital income certificate issued via Seva Sindhu accepted for National Merit?'
+          },
+          {
+            ticketId: 'SCH-2026-8914',
+            name: 'Sneha Patil',
+            email: 'sneha.patil@example.com',
+            subject: 'Bank account link error',
+            queryType: 'Application Issue',
+            status: 'in_progress',
+            createdAt: '2026-09-01T14:15:00Z',
+            message: 'My Aadhaar-linked bank IFSC code shows an error during step 3 verification.'
+          }
+        ];
+        localStorage.setItem(storageKey, JSON.stringify(messages));
+      }
+      return messages;
+    }
+
+    function renderTickets(filteredList) {
+      const tickets = filteredList || getAdminTickets();
+      const badge = document.getElementById('tabTicketBadge');
+      if (badge) badge.textContent = tickets.filter(t => t.status !== 'resolved').length;
+
+      const body = document.getElementById('ticketsBody');
+      if (!body) return;
+
+      if (tickets.length === 0) {
+        body.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--text-muted);">No support tickets found.</td></tr>`;
+        return;
+      }
+
+      const statusBadges = {
+        new: '<span class="badge badge-gold">New</span>',
+        in_progress: '<span class="badge badge-blue">Advisor Assigned</span>',
+        resolved: '<span class="badge badge-green">Resolved ✓</span>'
+      };
+
+      body.innerHTML = tickets.map((t, idx) => `
+    <tr>
+      <td><strong style="color:var(--primary);">#${t.ticketId || 'SCH-2026-0000'}</strong></td>
+      <td>
+        <div><strong>${t.name || 'Anonymous'}</strong></div>
+        <div style="font-size:0.75rem;color:var(--text-muted);">${t.email || ''}</div>
+      </td>
+      <td>
+        <div style="font-size:0.86rem;font-weight:600;">${t.subject || 'Support Query'}</div>
+        <div style="font-size:0.78rem;color:var(--text-muted);max-width:240px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${t.message || ''}</div>
+      </td>
+      <td><span class="badge" style="background:var(--surface-2);color:var(--text-secondary);font-size:0.72rem;">${t.queryType || 'General'}</span></td>
+      <td style="font-size:0.78rem;color:var(--text-muted);">${new Date(t.createdAt || Date.now()).toLocaleDateString('en-IN')}</td>
+      <td>${statusBadges[t.status] || statusBadges.new}</td>
+      <td>
+        <div class="action-btns">
+          ${t.status !== 'in_progress' && t.status !== 'resolved' ? `<button class="btn btn-outline btn-sm" onclick="setTicketStatus('${t.ticketId}', 'in_progress')" title="Assign Advisor">👨‍💼 Assign</button>` : ''}
+          ${t.status !== 'resolved' ? `<button class="btn btn-primary btn-sm" onclick="setTicketStatus('${t.ticketId}', 'resolved')" title="Mark as Resolved">✓ Resolve</button>` : `<span style="font-size:0.8rem;color:#22c55e;">Done</span>`}
+          <button class="btn btn-ghost btn-sm" onclick="viewTicketDetails('${t.ticketId}')" title="View Full Query">👁️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+    }
+
+    window.setTicketStatus = (ticketId, newStatus) => {
+      const messages = getAdminTickets();
+      const ticket = messages.find(m => m.ticketId === ticketId);
+      if (ticket) {
+        ticket.status = newStatus;
+        localStorage.setItem('scholarbridge_contact_messages', JSON.stringify(messages));
+        renderTickets();
+        showToast(`Ticket #${ticketId} updated to ${newStatus.replace('_', ' ')}!`, 'success');
+      }
+    };
+
+    window.viewTicketDetails = (ticketId) => {
+      const messages = getAdminTickets();
+      const ticket = messages.find(m => m.ticketId === ticketId);
+      if (!ticket) return;
+      alert(`Ticket Reference: #${ticket.ticketId}\nFrom: ${ticket.name} (${ticket.email})\nQuery Type: ${ticket.queryType}\n\nSubject: ${ticket.subject}\n\nMessage:\n${ticket.message}`);
+    };
+
+    function filterTickets(q) {
+      const query = (q || document.getElementById('ticketSearch').value).toLowerCase();
+      const cat = document.getElementById('ticketTypeFilter').value;
+      const status = document.getElementById('ticketStatusFilter').value;
+      const tickets = getAdminTickets();
+
+      const filtered = tickets.filter(t => {
+        const matchQ = !query || (t.ticketId && t.ticketId.toLowerCase().includes(query)) || (t.name && t.name.toLowerCase().includes(query)) || (t.subject && t.subject.toLowerCase().includes(query));
+        const matchCat = !cat || t.queryType === cat;
+        const matchStatus = !status || t.status === status;
+        return matchQ && matchCat && matchStatus;
+      });
+      renderTickets(filtered);
+    }
+
+    function addScholarship() {
+      const title = document.getElementById('newSchTitle').value;
+      if (!title) { showToast('Please enter a scholarship title', 'warning'); return; }
+      showToast(`"${title}" added successfully! 🏅`, 'success');
+      document.getElementById('addScholarshipModal').classList.remove('open');
+    }
+
+    // Chart
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+    const counts = [12, 18, 25, 31, 27, 45, 62, 78, 55];
+    const maxCount = Math.max(...counts);
+    document.getElementById('chartBars').innerHTML = months.map((m, i) => `
+  <div class="chart-bar-wrap">
+    <div class="chart-bar" style="height:${Math.round(counts[i] / maxCount * 100)}px;opacity:${0.5 + i / months.length * 0.5};"></div>
+    <span class="chart-label">${m}</span>
+  </div>`).join('');
+
+    // Init
+    renderApplications(mockApplications);
+    renderScholarships();
+    renderStudents();
+    renderTickets();
+
+    // Modal close on backdrop click
+    document.getElementById('addScholarshipModal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+    });
+  </script>
+</body>
+
+</html>
