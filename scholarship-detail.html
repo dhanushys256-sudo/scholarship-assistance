@@ -208,7 +208,12 @@
               🔖 Bookmark
             </button>
 
-            <div class="alert alert-success" style="margin-top:16px;font-size:0.8rem;">
+            <div class="alert alert-info" style="margin-top:14px;font-size:0.8rem;line-height:1.4;" id="detailQuotaNotice">
+              🎯 <strong>Application Policy:</strong> Students can apply for <strong>up to 5 scholarships only</strong>.
+              <div id="detailQuotaCountText" style="margin-top:4px;color:var(--primary);font-weight:600;"></div>
+            </div>
+
+            <div class="alert alert-success" style="margin-top:12px;font-size:0.8rem;">
               ✅ ScholarBridge helps you apply for free. No hidden charges.
             </div>
           </div>
@@ -278,6 +283,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const pct = Math.round((sch.applied / sch.seats) * 100);
   document.getElementById('ctaSeatPct').textContent = pct + '%';
   document.getElementById('ctaSeatBar').style.width = pct + '%';
+
+  // Check Application Quota Status
+  const userApps = getUserApplications();
+  const maxLimit = window.MAX_SCHOLARSHIP_APPLICATIONS || 5;
+  const check = canApplyForScholarship(schId);
+  const ctaBtn = document.getElementById('ctaApplyBtn');
+  const countNotice = document.getElementById('detailQuotaCountText');
+
+  if (countNotice) {
+    countNotice.textContent = `Your Quota: ${userApps.length} / ${maxLimit} applied (${Math.max(0, maxLimit - userApps.length)} remaining)`;
+  }
+
+  if (ctaBtn) {
+    if (check.reason === 'already_applied') {
+      ctaBtn.innerHTML = '✓ Already Applied (View in Dashboard)';
+      ctaBtn.className = 'btn btn-outline btn-full btn-lg';
+      ctaBtn.style.color = '#22c55e';
+      ctaBtn.style.borderColor = '#22c55e';
+      ctaBtn.onclick = () => window.location.href = 'dashboard.html';
+    } else if (check.reason === 'limit_reached') {
+      ctaBtn.innerHTML = 'Application Limit Reached (5/5)';
+      ctaBtn.className = 'btn btn-outline btn-full btn-lg';
+      ctaBtn.style.opacity = '0.75';
+      ctaBtn.onclick = () => showToast(`Application limit reached: You can apply for up to ${maxLimit} scholarships only (${userApps.length}/${maxLimit} applied).`, 'warning', 4500);
+    }
+  }
 
   // Similar
   const similar = AppState.scholarships.filter(s => s.id !== schId && (s.category === sch.category || s.level.some(l => sch.level.includes(l)))).slice(0, 4);

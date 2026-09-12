@@ -492,9 +492,59 @@ p {
 }
 
 .scholarship-card .badge {
-  position: absolute;
-  top: 16px;
-  right: 16px;
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.card-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+.card-top-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.card-top-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fav-btn {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0;
+  color: var(--text-muted);
+}
+
+.fav-btn:hover {
+  background: #fee2e2;
+  border-color: #ef4444;
+  transform: scale(1.1);
+}
+
+.fav-btn.active {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #ef4444;
 }
 
 .scholarship-card .org-logo {
@@ -2519,4 +2569,571 @@ body {
 
 .skiptranslate {
   display: inline;
+}
+
+/* ─── Student ID & Enhanced Sidebar Styles ─── */
+.student-id-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+}
+
+.student-id-label {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.student-id-val {
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+  font-family: monospace, sans-serif;
+  font-size: 0.95rem;
+}
+
+.dash-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 3px;
+}
+
+.dash-nav-btn i {
+  font-style: normal;
+  font-size: 1.1rem;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.dash-nav-btn:hover {
+  background: var(--surface-2);
+  color: var(--primary);
+}
+
+.dash-nav-btn.active {
+  background: rgba(255, 107, 0, 0.12);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.dash-badge-new {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: white;
+  font-size: 0.65rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 800;
+  margin-left: auto;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ─── OTR Verification Styles ─── */
+.otr-hero {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.otr-hero::after {
+  content: '🛡️';
+  position: absolute;
+  right: 20px;
+  bottom: -15px;
+  font-size: 6rem;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+.otr-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.otr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.otr-item {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.otr-item-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+/* ─── Document Wallet Styles ─── */
+.wallet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.doc-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  transition: var(--transition);
+  position: relative;
+}
+
+.doc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.doc-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.doc-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 107, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+/* ─── Education Loan Styles ─── */
+.loan-hero {
+  background: linear-gradient(135deg, #064e3b, #065f46);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loan-schemes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.loan-scheme-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  transition: var(--transition);
+}
+
+.loan-scheme-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: #10b981;
+}
+
+.loan-calc-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.calc-slider-group {
+  margin-bottom: 18px;
+}
+
+.calc-slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.calc-val-badge {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.calc-result-box {
+  background: var(--surface-2);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  border: 1px solid var(--border-light);
+}
+
+.calc-emi-num {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+/* ─── Stream Selector Styles ─── */
+.stream-hero {
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 28px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stream-cluster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stream-cluster-card {
+  background: white;
+  border: 2px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+
+.stream-cluster-card:hover {
+  border-color: #6366f1;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.stream-cluster-card.active {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.04);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.stream-cluster-card .cluster-icon {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+}
+
+.stream-cluster-card h5 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.stream-cluster-card p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.stream-pill-tag {
+  display: inline-block;
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  padding: 3px 8px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.stream-roadmap-box {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 26px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.roadmap-step-card {
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  border-left: 4px solid #6366f1;
+  margin-bottom: 12px;
+}
+
+/* ─── Assessment Scorecard Styles ─── */
+.assessment-hero {
+  background: linear-gradient(135deg, #064e3b, #047857);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.assessment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.assessment-metric-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.assessment-metric-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-sm);
+}
+
+.metric-gauge-num {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #059669;
+  line-height: 1.1;
+  margin: 6px 0;
+}
+
+.benchmark-box {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.action-roadmap-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.action-roadmap-item:last-child {
+  border-bottom: none;
+}
+
+.action-status-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ─── Awards & Achievements Styles ─── */
+.awards-hero {
+  background: linear-gradient(135deg, #78350f, #b45309);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.awards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.award-badge-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  transition: var(--transition);
+  position: relative;
+}
+
+.award-badge-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--gold);
+}
+
+.award-badge-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.award-medal-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(245, 158, 11, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.award-hash-code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+/* ─── Grievances Helpdesk Styles ─── */
+.grievance-hero {
+  background: linear-gradient(135deg, #1e293b, #334155);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.ticket-card {
+  background: white;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  margin-bottom: 18px;
+  transition: var(--transition);
+}
+
+.ticket-card:hover {
+  box-shadow: var(--shadow-sm);
+  border-color: var(--primary);
+}
+
+.stepper-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin: 20px 0 10px;
+}
+
+.stepper-h-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.stepper-h-ball {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.stepper-h-step.active .stepper-h-ball {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.stepper-h-step.done .stepper-h-ball {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: white;
+}
+
+.stepper-h-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.stepper-h-step.active .stepper-h-label {
+  color: var(--primary);
+}
+
+.stepper-h-step.done .stepper-h-label {
+  color: #22c55e;
+}
+
+.stepper-h-line {
+  position: absolute;
+  top: 16px;
+  left: 30px;
+  right: 30px;
+  height: 2px;
+  background: var(--border-light);
+  z-index: 1;
+}
+
+.stepper-h-fill {
+  height: 100%;
+  background: #22c55e;
+  transition: width 0.4s ease;
 }

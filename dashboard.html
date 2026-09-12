@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Dashboard — ScholarBridge</title>
-  <meta name="description" content="Track your scholarship applications, manage your profile, and discover new opportunities." />
+  <meta name="description"
+    content="Track your scholarship applications, manage your profile, and discover new opportunities." />
   <link rel="stylesheet" href="css/style.css" />
   <style>
-    body { background: var(--surface-2); }
-    .dash-page { padding: calc(var(--nav-height) + 28px) 0 60px; }
+    body {
+      background: var(--surface-2);
+    }
+
+    .dash-page {
+      padding: calc(var(--nav-height) + 28px) 0 60px;
+    }
 
     .dash-layout {
       display: grid;
@@ -28,10 +35,28 @@
       margin-bottom: 24px;
       color: white;
     }
-    .profile-banner .banner-icon { font-size: 2rem; flex-shrink: 0; }
-    .profile-banner h4 { color: white; margin-bottom: 4px; font-size: 1rem; }
-    .profile-banner p  { color: rgba(255,255,255,0.65); font-size: 0.82rem; margin-bottom: 12px; }
-    .profile-banner .btn { margin-left: auto; flex-shrink: 0; }
+
+    .profile-banner .banner-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .profile-banner h4 {
+      color: white;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+
+    .profile-banner p {
+      color: rgba(255, 255, 255, 0.65);
+      font-size: 0.82rem;
+      margin-bottom: 12px;
+    }
+
+    .profile-banner .btn {
+      margin-left: auto;
+      flex-shrink: 0;
+    }
 
     /* Quick Stats */
     .dash-stats {
@@ -51,17 +76,59 @@
       gap: 14px;
       transition: var(--transition);
     }
-    .dash-stat:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
-    .dash-stat .stat-icon-sm { width: 46px; height: 46px; border-radius: 12px; background: var(--gradient-soft); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-    .dash-stat .stat-val { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
-    .dash-stat .stat-lbl { font-size: 0.76rem; color: var(--text-muted); font-weight: 500; }
+
+    .dash-stat:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .dash-stat .stat-icon-sm {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: var(--gradient-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .dash-stat .stat-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .dash-stat .stat-lbl {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
 
     /* Application Status */
-    .app-status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-    .dot-pending    { background: var(--gold); }
-    .dot-review     { background: #3B82F6; }
-    .dot-approved   { background: #22C55E; }
-    .dot-rejected   { background: var(--accent); }
+    .app-status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-pending {
+      background: var(--gold);
+    }
+
+    .dot-review {
+      background: #3B82F6;
+    }
+
+    .dot-approved {
+      background: #22C55E;
+    }
+
+    .dot-rejected {
+      background: var(--accent);
+    }
 
     .app-card {
       background: white;
@@ -74,220 +141,1440 @@
       margin-bottom: 12px;
       transition: var(--transition);
     }
-    .app-card:hover { box-shadow: var(--shadow-sm); }
-    .app-card .app-emoji { font-size: 1.6rem; width: 50px; height: 50px; border-radius: 14px; background: var(--surface-2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .app-card .app-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 3px; }
-    .app-card .app-org   { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; }
-    .app-card .app-meta  { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-muted); }
-    .app-card .app-actions { margin-left: auto; display: flex; gap: 8px; flex-shrink: 0; }
+
+    .app-card:hover {
+      box-shadow: var(--shadow-sm);
+    }
+
+    .app-card .app-emoji {
+      font-size: 1.6rem;
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: var(--surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .app-card .app-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 3px;
+    }
+
+    .app-card .app-org {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .app-card .app-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .app-card .app-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
 
     /* Recommended */
-    .recommended-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .recommended-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
 
     /* Notification */
     .notif-item {
-      display: flex; align-items: flex-start; gap: 14px;
-      padding: 14px 0; border-bottom: 1px solid var(--border-light);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
     }
-    .notif-item:last-child { border-bottom: none; }
-    .notif-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--primary); flex-shrink: 0; margin-top: 5px; }
-    .notif-dot.read { background: var(--border-light); }
-    .notif-text { font-size: 0.85rem; }
-    .notif-time { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+
+    .notif-item:last-child {
+      border-bottom: none;
+    }
+
+    .notif-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .notif-dot.read {
+      background: var(--border-light);
+    }
+
+    .notif-text {
+      font-size: 0.85rem;
+    }
+
+    .notif-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
 
     @media (max-width: 1024px) {
-      .dash-layout { grid-template-columns: 1fr; }
-      .dash-stats { grid-template-columns: repeat(2, 1fr); }
+      .dash-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .dash-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
+
     @media (max-width: 600px) {
-      .dash-stats { grid-template-columns: 1fr 1fr; }
-      .recommended-grid { grid-template-columns: 1fr; }
-      .app-card { flex-wrap: wrap; }
-      .app-card .app-actions { margin-left: 0; }
+      .dash-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .recommended-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .app-card {
+        flex-wrap: wrap;
+      }
+
+      .app-card .app-actions {
+        margin-left: 0;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<div class="page-loader" id="pageLoader">
-  <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
-  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
-</div>
-<div class="toast-container"></div>
-
-<!-- Navbar -->
-<nav class="navbar scrolled" id="navbar">
-  <div class="navbar-inner">
-    <a href="index.html" class="navbar-logo"><div class="logo-icon">🎓</div>Scholar<span>Bridge</span></a>
-    <ul class="navbar-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="scholarships.html">Scholarships</a></li>
-      <li><a href="eligibility.html">Eligibility</a></li>
-      <li><a href="dashboard.html" class="active">Dashboard</a></li>
-    </ul>
-    <div class="navbar-actions">
-      <a href="profile.html" class="btn btn-ghost btn-sm">👤 Profile</a>
-      <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-logo text-gradient">🎓 ScholarBridge</div>
+    <div class="loader-bar">
+      <div class="loader-bar-fill"></div>
     </div>
-    <button class="nav-mobile-btn" id="navMobileBtn">☰</button>
   </div>
-</nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="index.html">🏠 Home</a>
-  <a href="scholarships.html">🏅 Scholarships</a>
-  <a href="eligibility.html">✅ Eligibility</a>
-  <a href="profile.html">👤 Profile</a>
-  <button class="btn btn-ghost btn-sm" onclick="logout()" style="text-align:left;">🚪 Logout</button>
-</div>
+  <div class="toast-container"></div>
 
-<div class="dash-page">
-  <div class="container">
-    <div class="dash-layout">
+  <!-- Navbar -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <div class="logo-icon">🎓</div>Scholar<span>Bridge</span>
+      </a>
+      <ul class="navbar-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="scholarships.html">Scholarships</a></li>
+        <li><a href="eligibility.html">Eligibility</a></li>
+        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <a href="profile.html" class="btn btn-ghost btn-sm">👤 Profile</a>
+        <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+      </div>
+      <button class="nav-mobile-btn" id="navMobileBtn">☰</button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">🏠 Home</a>
+    <a href="scholarships.html">🏅 Scholarships</a>
+    <a href="eligibility.html">✅ Eligibility</a>
+    <a href="profile.html">👤 Profile</a>
+    <button class="btn btn-ghost btn-sm" onclick="logout()" style="text-align:left;">🚪 Logout</button>
+  </div>
 
-      <!-- Sidebar -->
-      <div>
-        <div class="dash-sidebar">
-          <div class="user-info">
-            <div class="avatar" id="dashAvatar">R</div>
-            <div class="user-name" id="dashName">Ravi Kumar</div>
-            <div class="user-email" id="dashEmail">ravi@example.com</div>
+  <div class="dash-page">
+    <div class="container">
+      <div class="dash-layout">
+
+        <!-- Sidebar -->
+        <div>
+          <div class="dash-sidebar">
+            <!-- Student ID Box -->
+            <div class="student-id-box">
+              <div>
+                <div class="student-id-label">Student ID</div>
+                <div class="student-id-val" id="studentIdVal">12310656</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" style="padding:4px 8px;font-size:0.78rem;" onclick="copyStudentId()"
+                title="Copy Student ID">📋 Copy</button>
+            </div>
+
+            <div class="user-info">
+              <div class="avatar" id="dashAvatar">R</div>
+              <div class="user-name" id="dashName">Ravi Kumar</div>
+              <div class="user-email" id="dashEmail">ravi@example.com</div>
+            </div>
+            <nav>
+              <button class="dash-nav-btn active" onclick="switchDashTab('overview', this)">
+                <i>👤</i> My Profile & Overview
+              </button>
+              <button class="dash-nav-btn" onclick="switchDashTab('otr', this)">
+                <i>🛡️</i> OTR Verify
+              </button>
+              <button class="dash-nav-btn" onclick="switchDashTab('wallet', this)">
+                <i>👝</i> My Document Wallet
+              </button>
+              <button class="dash-nav-btn" onclick="switchDashTab('loan', this)">
+                <i>💳</i> Education Loan <span class="dash-badge-new">New</span>
+              </button>
+              <button class="dash-nav-btn" onclick="switchDashTab('favorites', this)">
+                <i>🤍</i> My Favorites <span class="badge badge-gold" id="sidebarFavBadge"
+                  style="margin-left:auto;font-size:0.7rem;padding:2px 6px;">2</span>
+              </button>
+              <button class="dash-nav-btn" onclick="switchDashTab('stream', this)">
+                <i>🧭</i> My Stream Selector <span class="dash-badge-new">AI</span>
+              </button>
+              <button class="dash-nav-btn" onclick="switchDashTab('assessment', this)">
+                <i>📊</i> My Assessment <span class="badge badge-gold"
+                  style="margin-left:auto;font-size:0.7rem;padding:2px 6px;">94%</span>
+              </button>
+              <button class="dash-nav-btn" onclick="switchDashTab('awards', this)">
+                <i>🏆</i> Awards & Achievements
+              </button>
+              <button class="dash-nav-btn" onclick="switchDashTab('grievances', this)">
+                <i>⚖️</i> My Grievances
+              </button>
+              <a href="eligibility.html" class="dash-nav-btn">
+                <i>⇄</i> Matched Scholarships
+              </a>
+              <a href="scholarships.html" class="dash-nav-btn">
+                <i>🏅</i> Browse Scholarships
+              </a>
+              <a href="contact.html" class="dash-nav-btn">
+                <i>🎧</i> Support & Helpline
+              </a>
+              <button class="dash-nav-btn" onclick="logout()" style="color:var(--accent) !important;margin-top:10px;">
+                <i>↪️</i> Log Out
+              </button>
+            </nav>
           </div>
-          <nav>
-            <a href="dashboard.html" class="active"><i>📊</i>Overview</a>
-            <a href="scholarships.html"><i>🏅</i>Browse Scholarships</a>
-            <a href="eligibility.html"><i>✅</i>Check Eligibility</a>
-            <a href="apply.html"><i>📝</i>Apply Now</a>
-            <a href="profile.html"><i>👤</i>My Profile</a>
-            <a href="faq.html"><i>❓</i>Help & FAQ</a>
-            <a href="contact.html"><i>📞</i>Contact Support</a>
-            <a href="#" onclick="logout()" style="color:var(--accent) !important;margin-top:8px;"><i>🚪</i>Logout</a>
-          </nav>
+
+          <!-- Upcoming Deadlines -->
+          <div class="card" style="margin-top:16px;padding:20px;">
+            <h4 style="font-size:0.9rem;margin-bottom:14px;">⏰ Upcoming Deadlines</h4>
+            <div id="deadlineList"></div>
+          </div>
         </div>
 
-        <!-- Upcoming Deadlines -->
-        <div class="card" style="margin-top:16px;padding:20px;">
-          <h4 style="font-size:0.9rem;margin-bottom:14px;">⏰ Upcoming Deadlines</h4>
-          <div id="deadlineList"></div>
+        <!-- Main Content -->
+        <div>
+          <!-- TAB 1: OVERVIEW -->
+          <div id="dash-tab-overview" class="dash-tab-pane">
+            <!-- Greeting -->
+            <div style="margin-bottom:20px;">
+              <h2 id="dashGreeting">Good Evening, Ravi! 👋</h2>
+              <p>Here's your scholarship activity overview.</p>
+            </div>
+
+            <!-- Profile Completion Banner -->
+            <div class="profile-banner">
+              <div class="banner-icon">📋</div>
+              <div>
+                <h4>Your profile is 80% complete</h4>
+                <p>Complete your profile to unlock more scholarship matches and improve your chances.</p>
+                <div class="progress-bar" style="width:200px;">
+                  <div class="progress-fill" style="width:80%;"></div>
+                </div>
+              </div>
+              <a href="profile.html" class="btn btn-white btn-sm">Complete Now</a>
+            </div>
+
+            <!-- Stats -->
+            <div class="dash-stats">
+              <div class="dash-stat fade-in">
+                <div class="stat-icon-sm">📤</div>
+                <div>
+                  <div class="stat-val" id="statApplied">3 / 5</div>
+                  <div class="stat-lbl">Applications (Max 5)</div>
+                </div>
+              </div>
+              <div class="dash-stat fade-in" style="transition-delay:0.1s;">
+                <div class="stat-icon-sm">✅</div>
+                <div>
+                  <div class="stat-val" style="color:#22C55E;" id="statApproved">1</div>
+                  <div class="stat-lbl">Approved</div>
+                </div>
+              </div>
+              <div class="dash-stat fade-in" style="transition-delay:0.2s;">
+                <div class="stat-icon-sm">🔄</div>
+                <div>
+                  <div class="stat-val" style="color:#3B82F6;" id="statReview">1</div>
+                  <div class="stat-lbl">Under Review</div>
+                </div>
+              </div>
+              <div class="dash-stat fade-in" style="transition-delay:0.3s;">
+                <div class="stat-icon-sm">🏅</div>
+                <div>
+                  <div class="stat-val" id="statSaved">2</div>
+                  <div class="stat-lbl">Bookmarked</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- My Applications -->
+            <div class="card" style="padding:24px;margin-bottom:24px;">
+              <div
+                style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <h3 style="font-size:1.1rem;margin:0;">📋 My Applications</h3>
+                  <span class="badge badge-gold" id="dashQuotaBadge">3/5 Applied</span>
+                </div>
+                <div id="applyMoreBtnWrap">
+                  <a href="scholarships.html" class="btn btn-outline btn-sm">+ Apply More</a>
+                </div>
+              </div>
+
+              <!-- Application Quota Progress Bar -->
+              <div
+                style="background:var(--surface-2);border-radius:var(--radius-sm);padding:14px 18px;margin-bottom:20px;border:1px solid var(--border-light);">
+                <div
+                  style="display:flex;justify-content:space-between;font-size:0.84rem;font-weight:600;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+                  <span>🎯 Application Quota: <span style="font-weight:400;color:var(--text-muted);">You can apply for
+                      up to 5 scholarships only</span></span>
+                  <span id="quotaProgressCount" style="color:var(--primary);">3 of 5 Used</span>
+                </div>
+                <div class="progress-bar"
+                  style="height:8px;background:var(--surface-3);border-radius:10px;overflow:hidden;margin-bottom:8px;">
+                  <div class="progress-fill" id="quotaProgressBar"
+                    style="width:60%;background:var(--gradient);transition:width 0.6s ease;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);">
+                  <span id="quotaSlotsStatus"><strong>2 slots</strong> remaining for application</span>
+                  <span>Maximum Allowed: 5</span>
+                </div>
+              </div>
+
+              <div id="applicationsList"></div>
+            </div>
+
+            <!-- Recommended Scholarships -->
+            <div style="margin-bottom:24px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <h3 style="font-size:1.1rem;">🌟 Recommended for You</h3>
+                <a href="scholarships.html" class="btn btn-ghost btn-sm">View All →</a>
+              </div>
+              <div id="recommendedQuotaNotice" style="display:none;margin-bottom:14px;">
+                <div class="alert alert-info" style="font-size:0.84rem;">
+                  ℹ️ You have reached the maximum application limit of <strong>5 scholarships</strong>. You can review
+                  your existing applications above or explore more opportunities for future cycles.
+                </div>
+              </div>
+              <div class="recommended-grid" id="recommendedGrid"></div>
+            </div>
+
+            <!-- Notifications -->
+            <div class="card" style="padding:24px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <h3 style="font-size:1.1rem;">🔔 Notifications</h3>
+                <span class="badge badge-orange">3 new</span>
+              </div>
+              <div id="notifList"></div>
+            </div>
+          </div>
+
+          <!-- TAB 2: OTR VERIFY -->
+          <div id="dash-tab-otr" class="dash-tab-pane" style="display:none;">
+            <div class="otr-hero">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;">
+                <div>
+                  <span class="otr-status-badge">✅ OTR VERIFIED & ACTIVE</span>
+                  <h2 style="color:white;margin:12px 0 6px;">One-Time Registration (OTR) Portal</h2>
+                  <p style="color:rgba(255,255,255,0.8);font-size:0.88rem;max-width:540px;">
+                    Your National OTR identity is verified by UIDAI Aadhaar e-KYC and linked to the Central Scholarship
+                    Registry.
+                  </p>
+                </div>
+                <button class="btn btn-white btn-sm" onclick="openOtrModal()">📄 View OTR Slip</button>
+              </div>
+            </div>
+
+            <div class="otr-grid">
+              <div class="otr-item">
+                <div class="otr-item-icon">🆔</div>
+                <div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:600;">OTR
+                    Reference ID</div>
+                  <div style="font-weight:800;font-size:1.05rem;color:var(--primary);margin-top:2px;">OTR-2026-12310656
+                  </div>
+                  <div style="font-size:0.75rem;color:#22c55e;margin-top:4px;">● Valid for all State & Central Portals
+                  </div>
+                </div>
+              </div>
+
+              <div class="otr-item">
+                <div class="otr-item-icon">💳</div>
+                <div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:600;">
+                    Aadhaar e-KYC</div>
+                  <div style="font-weight:800;font-size:1.05rem;margin-top:2px;">XXXXXXXX4821</div>
+                  <div style="font-size:0.75rem;color:#22c55e;margin-top:4px;">✓ Biometric & Face Authenticated</div>
+                </div>
+              </div>
+
+              <div class="otr-item">
+                <div class="otr-item-icon">📱</div>
+                <div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:600;">
+                    Registered Mobile</div>
+                  <div style="font-weight:800;font-size:1.05rem;margin-top:2px;">+91 98765 43210</div>
+                  <div style="font-size:0.75rem;color:#22c55e;margin-top:4px;">✓ OTP Verified on 14 Jan 2026</div>
+                </div>
+              </div>
+
+              <div class="otr-item">
+                <div class="otr-item-icon">🏦</div>
+                <div>
+                  <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;font-weight:600;">
+                    Aadhaar DBT Status</div>
+                  <div style="font-weight:800;font-size:1.05rem;margin-top:2px;">Active (SBI Bank)</div>
+                  <div style="font-size:0.75rem;color:#22c55e;margin-top:4px;">✓ Direct Benefit Transfer Enabled</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="padding:24px;margin-bottom:24px;">
+              <h4 style="font-size:1rem;margin-bottom:16px;">🏛️ Institutional Verification Timeline</h4>
+              <div style="display:flex;flex-direction:column;gap:14px;">
+                <div
+                  style="display:flex;align-items:center;gap:14px;background:var(--surface-2);padding:14px;border-radius:var(--radius-sm);">
+                  <div style="font-size:1.5rem;">🏫</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:700;font-size:0.9rem;">Government Engineering College, Nagpur</div>
+                    <div style="font-size:0.78rem;color:var(--text-muted);">AISHE Code: C-12894 • Principal Nodal
+                      Verification Officer Approved</div>
+                  </div>
+                  <span class="badge badge-green">Institute Verified ✓</span>
+                </div>
+                <div
+                  style="display:flex;align-items:center;gap:14px;background:var(--surface-2);padding:14px;border-radius:var(--radius-sm);">
+                  <div style="font-size:1.5rem;">🔒</div>
+                  <div style="flex:1;">
+                    <div style="font-weight:700;font-size:0.9rem;">DigiLocker Ecosystem Verification</div>
+                    <div style="font-size:0.78rem;color:var(--text-muted);">Marksheets & Domicile synced directly from
+                      National Academic Depository (NAD)</div>
+                  </div>
+                  <span class="badge badge-green">Sync Active ✓</span>
+                </div>
+              </div>
+
+              <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+                <button class="btn btn-primary btn-sm" onclick="openOtrModal()">Download OTR Certificate</button>
+                <button class="btn btn-outline btn-sm"
+                  onclick="showToast('Biometric status verified and up to date!','success')">Refresh e-KYC
+                  Status</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: DOCUMENT WALLET -->
+          <div id="dash-tab-wallet" class="dash-tab-pane" style="display:none;">
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h2 style="margin:0 0 4px;">👝 My Document Wallet</h2>
+                <p style="margin:0;color:var(--text-muted);font-size:0.86rem;">DigiLocker-integrated digital vault for
+                  instant scholarship document verification.</p>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button class="btn btn-outline btn-sm" onclick="syncDigiLocker()">🔄 Sync DigiLocker</button>
+                <button class="btn btn-primary btn-sm" onclick="openUploadDocModal()">+ Upload Document</button>
+              </div>
+            </div>
+
+            <div class="wallet-grid" id="walletDocsGrid"></div>
+          </div>
+
+          <!-- TAB 4: EDUCATION LOAN -->
+          <div id="dash-tab-loan" class="dash-tab-pane" style="display:none;">
+            <div class="loan-hero">
+              <span class="badge"
+                style="background:rgba(255,255,255,0.2);color:white;margin-bottom:10px;font-size:0.75rem;">NEW
+                GOVERNMENT SCHEME</span>
+              <h2 style="color:white;margin:6px 0 8px;">Education Loan & Subsidy Portal 💳</h2>
+              <p style="color:rgba(255,255,255,0.85);font-size:0.9rem;max-width:560px;">
+                Apply for government subsidized, low-interest student loans through the Central Sector Interest Subsidy
+                (CSIS) & Vidya Lakshmi initiative.
+              </p>
+            </div>
+
+            <!-- Interactive Loan EMI Calculator -->
+            <div class="loan-calc-card">
+              <div
+                style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+                <div>
+                  <h4 style="font-size:1.05rem;margin:0 0 4px;">📊 Interactive Student EMI Calculator</h4>
+                  <p style="margin:0;font-size:0.8rem;color:var(--text-muted);">Adjust amount and tenure to calculate
+                    your exact monthly EMI & subsidy savings.</p>
+                </div>
+                <span class="badge badge-gold" style="font-size:0.78rem;">0% Interest During College (CSIS)</span>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 280px;gap:28px;align-items:center;">
+                <div>
+                  <!-- Amount Slider -->
+                  <div class="calc-slider-group">
+                    <div class="calc-slider-header">
+                      <span>Loan Amount Required</span>
+                      <span class="calc-val-badge" id="loanAmountVal">₹5,00,000</span>
+                    </div>
+                    <input type="range" class="form-control" id="loanAmountRange" min="50000" max="2000000" step="25000"
+                      value="500000" oninput="updateLoanCalculator()" style="padding:0;" />
+                    <div
+                      style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--text-muted);margin-top:4px;">
+                      <span>₹50,000</span>
+                      <span>₹10 Lakhs</span>
+                      <span>₹20 Lakhs</span>
+                    </div>
+                  </div>
+
+                  <!-- Tenure Slider -->
+                  <div class="calc-slider-group">
+                    <div class="calc-slider-header">
+                      <span>Repayment Tenure</span>
+                      <span class="calc-val-badge" id="loanTenureVal">5 Years</span>
+                    </div>
+                    <input type="range" class="form-control" id="loanTenureRange" min="1" max="15" step="1" value="5"
+                      oninput="updateLoanCalculator()" style="padding:0;" />
+                    <div
+                      style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--text-muted);margin-top:4px;">
+                      <span>1 Year</span>
+                      <span>7 Years</span>
+                      <span>15 Years</span>
+                    </div>
+                  </div>
+
+                  <!-- Interest Rate Slider -->
+                  <div class="calc-slider-group" style="margin-bottom:0;">
+                    <div class="calc-slider-header">
+                      <span>Interest Rate (Annual)</span>
+                      <span class="calc-val-badge" id="loanRateVal">8.50%</span>
+                    </div>
+                    <input type="range" class="form-control" id="loanRateRange" min="7" max="14" step="0.25" value="8.5"
+                      oninput="updateLoanCalculator()" style="padding:0;" />
+                    <div
+                      style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--text-muted);margin-top:4px;">
+                      <span>7.0%</span>
+                      <span>10.5%</span>
+                      <span>14.0%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Result Card -->
+                <div class="calc-result-box">
+                  <div style="font-size:0.78rem;color:var(--text-muted);text-transform:uppercase;font-weight:600;">
+                    Estimated Monthly EMI</div>
+                  <div class="calc-emi-num" id="calcEmiDisplay">₹10,258</div>
+                  <div style="font-size:0.78rem;color:var(--text-muted);margin-top:4px;" id="calcTotalPayment">Total
+                    Payment: ₹6,15,480</div>
+                  <div
+                    style="background:#22c55e22;color:#16a34a;font-size:0.75rem;padding:6px 10px;border-radius:var(--radius-sm);font-weight:700;margin-top:12px;">
+                    🎁 Moratorium Subsidy: Up to ₹85,000 saved!
+                  </div>
+                  <button class="btn btn-primary btn-sm btn-full" style="margin-top:14px;"
+                    onclick="openLoanApplyModal()">Apply for Pre-Approval</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Featured Loan Schemes -->
+            <h4 style="font-size:1rem;margin-bottom:16px;">🏛️ Government & Public Sector Education Loan Schemes</h4>
+            <div class="loan-schemes-grid">
+              <div class="loan-scheme-card">
+                <div style="font-size:2rem;margin-bottom:10px;">🏛️</div>
+                <h5 style="margin-bottom:6px;">Vidya Lakshmi Central Scheme</h5>
+                <div style="color:var(--primary);font-weight:800;margin-bottom:10px;">Up to ₹7.5 Lakhs Collateral-Free
+                </div>
+                <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:14px;">
+                  Central government initiative with 100% interest subsidy during study period for families with income
+                  below ₹4.5 LPA.
+                </p>
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:16px;">
+                  • 0.5% girl student concession<br>
+                  • No margin money needed up to ₹4L
+                </div>
+                <button class="btn btn-outline btn-sm btn-full"
+                  onclick="openLoanApplyModal('Vidya Lakshmi Scheme')">Apply via Portal</button>
+              </div>
+
+              <div class="loan-scheme-card">
+                <div style="font-size:2rem;margin-bottom:10px;">🏦</div>
+                <h5 style="margin-bottom:6px;">SBI Scholar Loan Scheme</h5>
+                <div style="color:var(--primary);font-weight:800;margin-bottom:10px;">Interest starting at 8.15% p.a.
+                </div>
+                <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:14px;">
+                  Special scheme for students secured admission to premier institutions (IITs, NITs, IIMs, Central
+                  Universities).
+                </p>
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:16px;">
+                  • Repayment up to 15 years<br>
+                  • Zero processing charges
+                </div>
+                <button class="btn btn-outline btn-sm btn-full" onclick="openLoanApplyModal('SBI Scholar Loan')">Apply
+                  via Portal</button>
+              </div>
+
+              <div class="loan-scheme-card">
+                <div style="font-size:2rem;margin-bottom:10px;">🛡️</div>
+                <h5 style="margin-bottom:6px;">Canara Bank Vidya Sagar</h5>
+                <div style="color:var(--primary);font-weight:800;margin-bottom:10px;">Quick Digital Sanction</div>
+                <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:14px;">
+                  Covers tuition fees, hostel accommodation, laptop/computer, and exam costs with fast-track processing.
+                </p>
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:16px;">
+                  • 1 year post-course moratorium<br>
+                  • Flexible repayment options
+                </div>
+                <button class="btn btn-outline btn-sm btn-full"
+                  onclick="openLoanApplyModal('Canara Bank Vidya Sagar')">Apply via Portal</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: MY FAVORITES -->
+          <div id="dash-tab-favorites" class="dash-tab-pane" style="display:none;">
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h2 style="margin:0 0 4px;">🤍 My Favorite Scholarships</h2>
+                <p style="margin:0;color:var(--text-muted);font-size:0.86rem;">Bookmarked scholarship opportunities for
+                  easy review and quick application.</p>
+              </div>
+              <a href="scholarships.html" class="btn btn-primary btn-sm">+ Browse More</a>
+            </div>
+
+            <div id="favoritesListGrid" class="sch-grid"></div>
+          </div>
+
+          <!-- TAB 6: MY STREAM SELECTOR -->
+          <div id="dash-tab-stream" class="dash-tab-pane" style="display:none;">
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h2 style="margin:0 0 4px;">🧭 My Stream & Career Pathway Selector</h2>
+                <p style="margin:0;color:var(--text-muted);font-size:0.86rem;">AI-driven guidance aligning your
+                  aptitude, academic strengths, and passions with target degrees and high-yield scholarships.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="exportStreamRoadmap()">🖨️ Export Roadmap PDF</button>
+            </div>
+
+            <!-- Stream Hero -->
+            <div class="stream-hero">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <span class="badge" style="background:rgba(255,255,255,0.2);color:white;font-size:0.75rem;">AI MATCH
+                  ENGINE ACTIVE</span>
+                <span style="font-size:0.8rem;opacity:0.9;">Confidence: 96% Match</span>
+              </div>
+              <h3 style="color:white;margin-bottom:8px;font-size:1.3rem;" id="streamHeroTitle">Recommended Track: STEM,
+                AI & Engineering 💻</h3>
+              <p style="font-size:0.86rem;opacity:0.9;max-width:680px;line-height:1.5;margin-bottom:0;"
+                id="streamHeroDesc">
+                Based on your 87.4% marks in Class 12, Computer Science degree enrollment, and mathematical strengths,
+                this track offers the highest density of competitive merit grants and CSR funding.
+              </p>
+            </div>
+
+            <!-- Career Clusters -->
+            <h4 style="font-size:1rem;margin-bottom:14px;">Select Career Stream Cluster</h4>
+            <div class="stream-cluster-grid" id="streamClustersGrid"></div>
+
+            <!-- Active Roadmap Box -->
+            <div class="stream-roadmap-box" id="streamRoadmapBox">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Interactive Diagnostic Matcher -->
+            <div class="card"
+              style="padding:24px;border:1px solid var(--border-light);background:var(--surface-2);margin-bottom:24px;">
+              <h4 style="font-size:0.98rem;margin-bottom:6px;">🎯 Quick Interest Alignment Diagnostic</h4>
+              <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:18px;">Fine-tune your recommendations by
+                picking your primary subject interest and preferred working environment.</p>
+
+              <div
+                style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:16px;margin-bottom:18px;">
+                <div>
+                  <label class="form-label">Favorite Subject Area</label>
+                  <select class="form-control form-control-sm" id="diagSubject" onchange="runStreamDiagnostic()">
+                    <option value="stem">Computer Science & Mathematics</option>
+                    <option value="medical">Biology & Clinical Healthcare</option>
+                    <option value="science">Fundamental Physics & Astronomy</option>
+                    <option value="commerce">Accounting, Markets & FinTech</option>
+                    <option value="humanities">Law, Political Thought & Governance</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Ideal Work Environment</label>
+                  <select class="form-control form-control-sm" id="diagEnv" onchange="runStreamDiagnostic()">
+                    <option value="tech">High-Tech Labs & Software Systems</option>
+                    <option value="hospital">Hospitals, Clinics & Diagnostic Centers</option>
+                    <option value="research">University Research & Think Tanks</option>
+                    <option value="corporate">Financial Institutions & Consulting</option>
+                    <option value="public">Courts, Public Administration & NGOs</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="runStreamDiagnostic()">⚡ Recalculate Stream Fit</button>
+              <div id="diagResult" style="margin-top:14px;"></div>
+            </div>
+          </div>
+
+          <!-- TAB 7: MY ASSESSMENT -->
+          <div id="dash-tab-assessment" class="dash-tab-pane" style="display:none;">
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h2 style="margin:0 0 4px;">📊 My Scholarship Readiness & Benchmark Assessment</h2>
+                <p style="margin:0;color:var(--text-muted);font-size:0.86rem;">Official assessment evaluating academic
+                  standing, quota eligibility, and maximum accessible financial aid.</p>
+              </div>
+              <a href="eligibility.html" class="btn btn-primary btn-sm">Take Comprehensive Test →</a>
+            </div>
+
+            <!-- Assessment Hero -->
+            <div class="assessment-hero">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+                <div>
+                  <span class="badge"
+                    style="background:rgba(255,255,255,0.2);color:white;margin-bottom:8px;font-size:0.75rem;">TIER 1
+                    SCHOLAR PROFILE</span>
+                  <h3 style="color:white;margin-bottom:6px;font-size:1.35rem;">Overall Readiness Score: 94 / 100</h3>
+                  <p style="font-size:0.86rem;opacity:0.9;margin:0;max-width:540px;">
+                    Grade: <strong>A+ (Outstanding Candidate)</strong>. Your academic consistency (87.4%) and OBC quota
+                    status qualify you for 11 Central, State, and Corporate scholarships.
+                  </p>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:2.8rem;font-weight:900;color:#34d399;line-height:1;">A+</div>
+                  <span style="font-size:0.78rem;opacity:0.85;">Top 6% in Domicile Region</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Metric Cards -->
+            <div class="assessment-grid">
+              <div class="assessment-metric-card">
+                <div style="font-size:0.78rem;color:var(--text-muted);font-weight:600;">READINESS SCORE</div>
+                <div class="metric-gauge-num" id="assessScoreNum">94%</div>
+                <span class="badge badge-green" style="font-size:0.72rem;">Excellent Fit</span>
+              </div>
+              <div class="assessment-metric-card">
+                <div style="font-size:0.78rem;color:var(--text-muted);font-weight:600;">MAX GRANT VALUE</div>
+                <div class="metric-gauge-num" style="color:var(--primary);" id="assessGrantNum">₹3.45L</div>
+                <span class="badge badge-gold" style="font-size:0.72rem;">Annual Potential</span>
+              </div>
+              <div class="assessment-metric-card">
+                <div style="font-size:0.78rem;color:var(--text-muted);font-weight:600;">MATCHED SCHEMES</div>
+                <div class="metric-gauge-num" style="color:#2563eb;" id="assessSchemesNum">11</div>
+                <span class="badge" style="background:#2563eb22;color:#2563eb;font-size:0.72rem;">Schemes Active</span>
+              </div>
+              <div class="assessment-metric-card">
+                <div style="font-size:0.78rem;color:var(--text-muted);font-weight:600;">VERIFICATION HEALTH</div>
+                <div class="metric-gauge-num" style="color:#059669;">100%</div>
+                <span class="badge badge-green" style="font-size:0.72rem;">6/6 Docs Verified</span>
+              </div>
+            </div>
+
+            <!-- Benchmark Simulation Tool -->
+            <div class="benchmark-box">
+              <div
+                style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+                <h4 style="font-size:1rem;margin:0;">🎛️ Live Benchmark Simulator</h4>
+                <span style="font-size:0.78rem;color:var(--text-muted);">Adjust parameters to forecast qualification
+                  changes</span>
+              </div>
+
+              <div
+                style="display:grid;grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));gap:20px;margin-bottom:20px;">
+                <div>
+                  <div
+                    style="display:flex;justify-content:space-between;font-size:0.82rem;font-weight:600;margin-bottom:6px;">
+                    <span>Academic Percentage</span>
+                    <span style="color:var(--primary);" id="simMarksVal">87.4%</span>
+                  </div>
+                  <input type="range" class="form-control" id="simMarksRange" min="50" max="100" step="0.5" value="87.4"
+                    oninput="updateAssessmentSim()" />
+                </div>
+
+                <div>
+                  <div
+                    style="display:flex;justify-content:space-between;font-size:0.82rem;font-weight:600;margin-bottom:6px;">
+                    <span>Annual Family Income</span>
+                    <span style="color:var(--primary);" id="simIncomeVal">₹2,50,000</span>
+                  </div>
+                  <input type="range" class="form-control" id="simIncomeRange" min="50000" max="1200000" step="25000"
+                    value="250000" oninput="updateAssessmentSim()" />
+                </div>
+
+                <div>
+                  <label class="form-label" style="font-size:0.82rem;">Category Reservation</label>
+                  <select class="form-control form-control-sm" id="simCategorySelect" onchange="updateAssessmentSim()">
+                    <option value="OBC" selected>OBC (Other Backward Classes)</option>
+                    <option value="SC">SC (Scheduled Caste)</option>
+                    <option value="ST">ST (Scheduled Tribe)</option>
+                    <option value="EWS">EWS (Economically Weaker Section)</option>
+                    <option value="General">General / Open</option>
+                  </select>
+                </div>
+              </div>
+
+              <div
+                style="background:var(--surface-2);border-radius:var(--radius-sm);padding:16px 20px;border:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+                <div>
+                  <span style="font-size:0.84rem;font-weight:700;display:block;">Forecasted Grant Potential: <span
+                      id="simForecastAmount" style="color:var(--primary);font-size:1.1rem;">₹3,45,000 /
+                      year</span></span>
+                  <span style="font-size:0.75rem;color:var(--text-muted);" id="simForecastDetail">11 Eligible Schemes
+                    unlocked including Central Merit, ONGC & Reliance Foundation</span>
+                </div>
+                <button class="btn btn-outline btn-sm"
+                  onclick="showToast('Benchmark forecast saved to your profile! 📈','success',2500)">Save
+                  Benchmark</button>
+              </div>
+            </div>
+
+            <!-- Action Improvement Roadmap -->
+            <div class="card" style="padding:24px;border:1px solid var(--border-light);">
+              <h4 style="font-size:0.98rem;margin-bottom:14px;">🎯 Actionable Roadmap to Maximize Scholarship Value</h4>
+
+              <div class="action-roadmap-item">
+                <div class="action-status-icon" style="background:#22c55e22;color:#22c55e;">✓</div>
+                <div style="flex:1;">
+                  <div style="font-size:0.88rem;font-weight:700;margin-bottom:2px;">One-Time Registration (OTR)
+                    Attestation</div>
+                  <div style="font-size:0.78rem;color:var(--text-muted);">Verified with National Scholarship Portal
+                    (OTR-2026-12310656) and Aadhaar UIDAI e-KYC.</div>
+                </div>
+                <span class="badge badge-green">Completed</span>
+              </div>
+
+              <div class="action-roadmap-item">
+                <div class="action-status-icon" style="background:#22c55e22;color:#22c55e;">✓</div>
+                <div style="flex:1;">
+                  <div style="font-size:0.88rem;font-weight:700;margin-bottom:2px;">Direct Benefit Transfer (DBT)
+                    Account Seeding</div>
+                  <div style="font-size:0.78rem;color:var(--text-muted);">State Bank of India account linked with NPCI
+                    mapper for instant automated disbursement.</div>
+                </div>
+                <span class="badge badge-green">Verified</span>
+              </div>
+
+              <div class="action-roadmap-item">
+                <div class="action-status-icon" style="background:rgba(255,107,0,0.15);color:var(--primary);">⏳</div>
+                <div style="flex:1;">
+                  <div style="font-size:0.88rem;font-weight:700;margin-bottom:2px;">Utilize Remaining Application Quota
+                    (2 Slots Left)</div>
+                  <div style="font-size:0.78rem;color:var(--text-muted);">You have applied for 3 of 5 allowed
+                    scholarships. Submit applications for high-grant schemes before deadlines.</div>
+                </div>
+                <a href="scholarships.html" class="btn btn-outline btn-sm"
+                  style="font-size:0.75rem;padding:3px 10px;">Apply Now →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 8: AWARDS & ACHIEVEMENTS -->
+          <div id="dash-tab-awards" class="dash-tab-pane" style="display:none;">
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h2 style="margin:0 0 4px;">🏆 Awards, Honors & Digital Credentials</h2>
+                <p style="margin:0;color:var(--text-muted);font-size:0.86rem;">Your verified academic milestones,
+                  national percentiles, and extracurricular certificates.</p>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button class="btn btn-primary btn-sm" onclick="openAddAwardModal()">+ Add Achievement</button>
+                <button class="btn btn-outline btn-sm" onclick="downloadScholarshipCV()">📄 Download Scholar CV</button>
+              </div>
+            </div>
+
+            <!-- Awards Hero -->
+            <div class="awards-hero">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+                <div>
+                  <span class="badge"
+                    style="background:rgba(255,255,255,0.2);color:white;font-size:0.75rem;margin-bottom:8px;">VERIFIABLE
+                    DIGITAL PORTFOLIO</span>
+                  <h3 style="color:white;margin-bottom:6px;font-size:1.3rem;">Official Scholar Credential Vault</h3>
+                  <p style="font-size:0.84rem;opacity:0.9;margin:0;max-width:540px;">
+                    Credentials in this vault are cryptographically anchored to your Student ID
+                    (<strong>12310656</strong>) and accepted by international & government scholarship review
+                    committees.
+                  </p>
+                </div>
+                <div
+                  style="background:rgba(255,255,255,0.15);padding:14px 18px;border-radius:var(--radius-sm);text-align:center;">
+                  <div style="font-size:1.8rem;font-weight:900;color:white;" id="awardsCountBadge">4</div>
+                  <div style="font-size:0.75rem;color:white;opacity:0.9;">Verified Honors</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Awards Grid -->
+            <div class="awards-grid" id="awardsListGrid"></div>
+
+            <!-- Digital Portfolio Banner -->
+            <div class="card"
+              style="padding:22px;border:1px solid var(--border-light);background:var(--surface-2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+              <div style="display:flex;align-items:center;gap:14px;">
+                <div style="font-size:2.4rem;">📜</div>
+                <div>
+                  <h5 style="margin-bottom:3px;font-size:0.95rem;">Verified Scholarship CV & Honors Portfolio</h5>
+                  <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Includes academic percentiles, OTR
+                    status, verified certificates, and scholarship references.</p>
+                </div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="downloadScholarshipCV()">📥 Download PDF Summary</button>
+            </div>
+          </div>
+
+          <!-- TAB 9: MY GRIEVANCES & HELPDESK -->
+          <div id="dash-tab-grievances" class="dash-tab-pane" style="display:none;">
+            <div
+              style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h2 style="margin:0 0 4px;">⚖️ Central Grievance Redressal & Helpdesk</h2>
+                <p style="margin:0;color:var(--text-muted);font-size:0.86rem;">Track formal appeals, DBT disbursement
+                  delays, and institutional verification issues under government SLA guarantees.</p>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="openLodgeGrievanceModal()">+ Lodge New Grievance</button>
+            </div>
+
+            <!-- Grievance Hero -->
+            <div class="grievance-hero">
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
+                <div>
+                  <span class="badge"
+                    style="background:rgba(255,255,255,0.2);color:white;font-size:0.75rem;margin-bottom:8px;">OFFICIAL
+                    ESCALATION DESK</span>
+                  <h3 style="color:white;margin-bottom:6px;font-size:1.3rem;">National Scholarship Portal Grievance Wing
+                  </h3>
+                  <p style="font-size:0.84rem;opacity:0.9;margin:0;max-width:540px;">
+                    Guaranteed response within <strong>5 working days</strong> by State and Central Nodal Officers. All
+                    queries are monitored by the Department of Higher Education.
+                  </p>
+                </div>
+                <div
+                  style="background:rgba(255,255,255,0.12);padding:14px 20px;border-radius:var(--radius-sm);text-align:center;">
+                  <div style="font-size:1.6rem;font-weight:800;color:#38bdf8;">1 Active</div>
+                  <div style="font-size:0.75rem;color:white;opacity:0.9;">Grievance Ticket</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grievance Tickets List -->
+            <div id="grievanceTicketsList"></div>
+
+            <!-- Helpline Box -->
+            <div class="card"
+              style="padding:22px;border:1px solid var(--border-light);background:var(--surface-2);margin-top:20px;">
+              <h4 style="font-size:0.95rem;margin-bottom:8px;">🎧 Direct Emergency Escalation Contacts</h4>
+              <div
+                style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:14px;font-size:0.82rem;">
+                <div>
+                  <strong>📞 Central Toll-Free Helpline:</strong><br>
+                  <span style="color:var(--primary);font-weight:700;">1800-118-005</span> (Mon–Sat, 9AM–6PM)
+                </div>
+                <div>
+                  <strong>✉️ Grievance Email Support:</strong><br>
+                  <span style="color:var(--primary);font-weight:700;">grievance.scholarship@gov.in</span>
+                </div>
+                <div>
+                  <strong>🏛️ State Nodal Office (Maharashtra):</strong><br>
+                  <span>Higher Education Directorate, Pune (AISHE Helpdesk)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- OTR Certificate Modal -->
+  <div class="receipt-modal-backdrop" id="otrModal">
+    <div class="receipt-card" style="max-width:560px;">
+      <div class="receipt-header">
+        <div style="font-size:1.8rem;margin-bottom:4px;">🛡️ National Scholarship Portal</div>
+        <h3 style="font-size:1.15rem;margin-bottom:4px;">Official One-Time Registration (OTR) Slip</h3>
+        <p style="font-size:0.75rem;color:var(--text-muted);margin:0;">Government of India • Central e-KYC Verification
+          Wing</p>
+      </div>
+
+      <div class="receipt-row">
+        <span class="receipt-label">Student ID</span>
+        <span class="receipt-value" style="font-weight:800;color:var(--primary);">12310656</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">OTR Number</span>
+        <span class="receipt-value" style="font-weight:800;color:#22c55e;">OTR-2026-12310656</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Applicant Name</span>
+        <span class="receipt-value">Ravi Kumar</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Aadhaar Linked</span>
+        <span class="receipt-value">XXXXXXXX4821 (e-KYC Verified)</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Registration Date</span>
+        <span class="receipt-value">January 14, 2026</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">Institution Verified</span>
+        <span class="receipt-value">Govt Engineering College (AISHE: C-12894)</span>
+      </div>
+      <div class="receipt-row">
+        <span class="receipt-label">DBT Seeding</span>
+        <span class="receipt-value" style="color:#22c55e;">Enabled (State Bank of India)</span>
+      </div>
+
+      <div
+        style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:14px;border-top:1px solid var(--border-light);">
+        <div>
+          <div class="receipt-stamp">UIDAI VERIFIED</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:6px;">Digitally attested by NSP e-Governance
+            Authority</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:2.2rem;">🏛️</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);">Official Seal</div>
         </div>
       </div>
 
-      <!-- Main Content -->
-      <div>
-        <!-- Greeting -->
-        <div style="margin-bottom:20px;">
-          <h2 id="dashGreeting">Good Evening, Ravi! 👋</h2>
-          <p>Here's your scholarship activity overview.</p>
+      <div class="receipt-actions" style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;">
+        <button class="btn btn-outline btn-sm" onclick="closeOtrModal()">Close</button>
+        <button class="btn btn-primary btn-sm" onclick="window.print()">🖨️ Print / Save PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Document Modal -->
+  <div class="modal-backdrop" id="uploadDocModal">
+    <div class="modal" style="max-width:500px;width:92%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-size:1.15rem;margin:0;">📤 Upload to Document Wallet</h3>
+        <button class="modal-close" onclick="closeUploadDocModal()">✕</button>
+      </div>
+      <form id="docUploadForm" onsubmit="handleDocUpload(event)">
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label">Document Type <span class="required">*</span></label>
+          <select class="form-control" id="uploadDocType" required>
+            <option value="Class 10 Marksheet">Class 10 Marksheet</option>
+            <option value="Class 12 Marksheet">Class 12 Marksheet</option>
+            <option value="Aadhaar Card">Aadhaar Card (Both sides)</option>
+            <option value="Income Certificate">Income Certificate (Current FY)</option>
+            <option value="Caste Certificate">Caste / Category Certificate</option>
+            <option value="College Bonafide">College Bonafide / Fee Receipt</option>
+            <option value="Bank Passbook">Bank Passbook Copy</option>
+          </select>
         </div>
 
-        <!-- Profile Completion Banner -->
-        <div class="profile-banner">
-          <div class="banner-icon">📋</div>
+        <div class="form-group" style="margin-bottom:14px;">
+          <label class="form-label">Issuing Authority</label>
+          <input type="text" class="form-control" id="uploadDocAuth" placeholder="e.g. State Board, Tahsildar Office"
+            required value="State Board" />
+        </div>
+
+        <div class="file-upload" id="walletFileDrop" style="margin-bottom:18px;">
+          <div class="upload-icon">📁</div>
+          <p><span>Click or drag file here</span> (PDF, JPG, PNG)</p>
+          <p style="font-size:0.75rem;color:var(--text-muted);">Max file size: 5MB</p>
+          <input type="file" id="walletFileInput" style="display:none;" />
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:10px;">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="closeUploadDocModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Document</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Loan Pre-Approval Modal -->
+  <div class="modal-backdrop" id="loanApplyModal">
+    <div class="modal" style="max-width:520px;width:92%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-size:1.15rem;margin:0;">💳 Education Loan Pre-Approval</h3>
+        <button class="modal-close" onclick="closeLoanApplyModal()">✕</button>
+      </div>
+      <form id="loanApplyForm" onsubmit="handleLoanApply(event)">
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Selected Scheme</label>
+          <input type="text" class="form-control" id="loanSchemeName" readonly value="Vidya Lakshmi Scheme" />
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Required Loan Amount (₹)</label>
+          <input type="number" class="form-control" id="loanApplyAmount" required value="500000" />
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Annual Family Income (₹)</label>
+          <input type="number" class="form-control" id="loanApplyIncome" required value="250000" />
+        </div>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label">Course / Degree</label>
+          <input type="text" class="form-control" id="loanApplyCourse" required value="B.Tech Computer Science" />
+        </div>
+        <div class="alert alert-info" style="font-size:0.78rem;margin-bottom:16px;">
+          ℹ️ Under CSIS guidelines, families with annual income ≤ ₹4.5 Lakhs qualify for <strong>100% government
+            interest subsidy</strong> during the course period.
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="closeLoanApplyModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Submit Pre-Approval</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Award / Achievement Modal -->
+  <div class="modal-backdrop" id="addAwardModal">
+    <div class="modal" style="max-width:520px;width:92%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-size:1.15rem;margin:0;">🏆 Add New Achievement / Honor</h3>
+        <button class="modal-close" onclick="closeAddAwardModal()">✕</button>
+      </div>
+      <form id="awardForm" onsubmit="handleAddAward(event)">
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Honor / Award Title <span class="required">*</span></label>
+          <input type="text" class="form-control" id="awardTitle" required
+            placeholder="e.g. State Level Mathematics Olympiad 1st Rank" />
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Issuing Authority / Organization <span class="required">*</span></label>
+          <input type="text" class="form-control" id="awardOrg" required
+            placeholder="e.g. Science Olympiad Foundation / State Board" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
           <div>
-            <h4>Your profile is 80% complete</h4>
-            <p>Complete your profile to unlock more scholarship matches and improve your chances.</p>
-            <div class="progress-bar" style="width:200px;">
-              <div class="progress-fill" style="width:80%;"></div>
-            </div>
+            <label class="form-label">Year Awarded</label>
+            <input type="number" class="form-control" id="awardYear" required value="2025" min="2018" max="2027" />
           </div>
-          <a href="profile.html" class="btn btn-white btn-sm">Complete Now</a>
-        </div>
-
-        <!-- Stats -->
-        <div class="dash-stats">
-          <div class="dash-stat fade-in">
-            <div class="stat-icon-sm">📤</div>
-            <div>
-              <div class="stat-val" id="statApplied">3</div>
-              <div class="stat-lbl">Applied</div>
-            </div>
-          </div>
-          <div class="dash-stat fade-in" style="transition-delay:0.1s;">
-            <div class="stat-icon-sm">✅</div>
-            <div>
-              <div class="stat-val" style="color:#22C55E;" id="statApproved">1</div>
-              <div class="stat-lbl">Approved</div>
-            </div>
-          </div>
-          <div class="dash-stat fade-in" style="transition-delay:0.2s;">
-            <div class="stat-icon-sm">🔄</div>
-            <div>
-              <div class="stat-val" style="color:#3B82F6;" id="statReview">1</div>
-              <div class="stat-lbl">Under Review</div>
-            </div>
-          </div>
-          <div class="dash-stat fade-in" style="transition-delay:0.3s;">
-            <div class="stat-icon-sm">🏅</div>
-            <div>
-              <div class="stat-val" id="statSaved">5</div>
-              <div class="stat-lbl">Bookmarked</div>
-            </div>
+          <div>
+            <label class="form-label">Category</label>
+            <select class="form-control" id="awardCategory">
+              <option value="Academic Merit">Academic Merit</option>
+              <option value="Science & Research">Science & Research</option>
+              <option value="Innovation & Tech">Innovation & Tech</option>
+              <option value="Sports & Athletics">Sports & Athletics</option>
+              <option value="Leadership & Social">Leadership & Social</option>
+            </select>
           </div>
         </div>
-
-        <!-- My Applications -->
-        <div class="card" style="padding:24px;margin-bottom:24px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
-            <h3 style="font-size:1.1rem;">📋 My Applications</h3>
-            <a href="scholarships.html" class="btn btn-outline btn-sm">+ Apply More</a>
-          </div>
-
-          <div id="applicationsList"></div>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label">Credential / Certificate ID (Optional)</label>
+          <input type="text" class="form-control" id="awardHash" placeholder="e.g. CERT-2025-SOF-889" />
         </div>
-
-        <!-- Recommended Scholarships -->
-        <div style="margin-bottom:24px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <h3 style="font-size:1.1rem;">🌟 Recommended for You</h3>
-            <a href="scholarships.html" class="btn btn-ghost btn-sm">View All →</a>
-          </div>
-          <div class="recommended-grid" id="recommendedGrid"></div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="closeAddAwardModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Credential</button>
         </div>
-
-        <!-- Notifications -->
-        <div class="card" style="padding:24px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <h3 style="font-size:1.1rem;">🔔 Notifications</h3>
-            <span class="badge badge-orange">3 new</span>
-          </div>
-          <div id="notifList"></div>
-        </div>
-      </div>
-
+      </form>
     </div>
   </div>
-</div>
 
-<script src="js/firebase-config.js"></script>
-<script src="js/app.js"></script>
-<script src="js/language.js"></script>
-<script src="js/chatbot.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const user = AppState.mockUser;
+  <!-- Lodge Grievance Modal -->
+  <div class="modal-backdrop" id="lodgeGrievanceModal">
+    <div class="modal" style="max-width:540px;width:92%;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <h3 style="font-size:1.15rem;margin:0;">⚖️ Lodge Grievance / Redressal Appeal</h3>
+        <button class="modal-close" onclick="closeLodgeGrievanceModal()">✕</button>
+      </div>
+      <form id="grievanceForm" onsubmit="handleLodgeGrievance(event)">
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Grievance Category <span class="required">*</span></label>
+          <select class="form-control" id="grvCategory" required>
+            <option value="DBT & Payment Delay">DBT Direct Bank Transfer Delay</option>
+            <option value="Institutional Verification">College Nodal Officer Verification Issue</option>
+            <option value="Document Discrepancy">Document Rejection Appeal</option>
+            <option value="Merit List Appeal">Merit Cutoff & Ranking Inquiry</option>
+            <option value="Technical Glitch">Portal / OTR Technical Error</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Concerned Scheme / Application</label>
+          <input type="text" class="form-control" id="grvScheme" required
+            value="Inspire Scholarship for Higher Education" />
+        </div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Grievance Subject <span class="required">*</span></label>
+          <input type="text" class="form-control" id="grvSubject" required
+            placeholder="Brief description of the problem" />
+        </div>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label class="form-label">Detailed Complaint & Context <span class="required">*</span></label>
+          <textarea class="form-control" id="grvDetails" rows="3" required
+            placeholder="Provide details, bank transaction dates, or specific errors..."></textarea>
+        </div>
+        <div class="alert alert-info" style="font-size:0.78rem;margin-bottom:16px;">
+          ⏱️ Under NSP Public Grievance Charter, you will receive an official acknowledgment and response from the Nodal
+          Officer within <strong>5 working days</strong>.
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="closeLodgeGrievanceModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Submit Grievance</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-  // Update UI with user info
-  const initial = user.name.charAt(0).toUpperCase();
-  document.getElementById('dashAvatar').textContent = initial;
-  document.getElementById('dashName').textContent = user.name;
-  document.getElementById('dashEmail').textContent = user.email;
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/language.js"></script>
+  <script src="js/chatbot.js"></script>
+  <script>
+    // Tab Switching Handler
+    window.switchDashTab = (tabName, btnEl) => {
+      document.querySelectorAll('.dash-tab-pane').forEach(p => p.style.display = 'none');
+      const target = document.getElementById(`dash-tab-${tabName}`);
+      if (target) target.style.display = 'block';
 
-  // Greeting
-  const hour = new Date().getHours();
-  const greet = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
-  document.getElementById('dashGreeting').textContent = `${greet}, ${user.name.split(' ')[0]}! 👋`;
+      document.querySelectorAll('.dash-nav-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
 
-  // Applications
-  const statusMap = {
-    pending:      { color: '#EAB308', label: 'Pending',      dot: 'dot-pending' },
-    under_review: { color: '#3B82F6', label: 'Under Review', dot: 'dot-review' },
-    approved:     { color: '#22C55E', label: 'Approved ✓',   dot: 'dot-approved' },
-    rejected:     { color: '#EF4444', label: 'Rejected',     dot: 'dot-rejected' }
-  };
+      if (tabName === 'wallet') renderWalletDocs();
+      if (tabName === 'loan') updateLoanCalculator();
+      if (tabName === 'favorites') renderFavoritesTab();
+      if (tabName === 'stream') renderStreamTab();
+      if (tabName === 'assessment') renderAssessmentTab();
+      if (tabName === 'awards') renderAwardsTab();
+      if (tabName === 'grievances') renderGrievanceTab();
 
-  const appHTML = user.applications.map(app => {
-    const sch = AppState.scholarships.find(s => s.id === app.scholarshipId) || {};
-    const st  = statusMap[app.status] || statusMap.pending;
-    return `
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    };
+
+    // Copy Student ID
+    window.copyStudentId = () => {
+      const id = document.getElementById('studentIdVal').textContent.trim();
+      navigator.clipboard.writeText(id).then(() => {
+        showToast(`Student ID (${id}) copied to clipboard! 📋`, 'success', 2500);
+      });
+    };
+
+    // OTR Modal Controls
+    window.openOtrModal = () => {
+      const modal = document.getElementById('otrModal');
+      if (modal) modal.classList.add('open');
+    };
+    window.closeOtrModal = () => {
+      const modal = document.getElementById('otrModal');
+      if (modal) modal.classList.remove('open');
+    };
+
+    // Document Wallet Functions
+    window.renderWalletDocs = () => {
+      const grid = document.getElementById('walletDocsGrid');
+      if (!grid) return;
+      const docs = getWalletDocuments();
+
+      grid.innerHTML = docs.map(d => `
+    <div class="doc-card fade-in">
+      <div class="doc-card-top">
+        <div class="doc-card-icon">${d.icon || '📄'}</div>
+        <span class="badge ${d.status === 'verified' ? 'badge-green' : 'badge-gold'}">
+          ${d.status === 'verified' ? '✓ Verified' : '⏳ Pending'}
+        </span>
+      </div>
+      <h5 style="font-size:0.92rem;margin-bottom:4px;line-height:1.3;">${d.title}</h5>
+      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">
+        🏢 ${d.authority} • ${d.size}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-light);padding-top:12px;margin-top:auto;">
+        <span style="font-size:0.75rem;color:var(--text-muted);">Updated: ${d.date}</span>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-ghost btn-sm" style="padding:2px 8px;font-size:0.75rem;" onclick="previewDocument('${d.title}')">View</button>
+          <button class="btn btn-outline btn-sm" style="padding:2px 8px;font-size:0.75rem;" onclick="showToast('Downloading ${d.title}... 📥','info',2000)">Download</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+    };
+
+    window.syncDigiLocker = () => {
+      showToast('Connecting to DigiLocker (e-Pramaan Gateway)... 🔄', 'info', 2000);
+      setTimeout(() => {
+        showToast('DigiLocker sync complete! 6 documents updated & verified ✅', 'success', 3500);
+        renderWalletDocs();
+      }, 1800);
+    };
+
+    window.openUploadDocModal = () => {
+      const modal = document.getElementById('uploadDocModal');
+      if (modal) modal.classList.add('open');
+    };
+    window.closeUploadDocModal = () => {
+      const modal = document.getElementById('uploadDocModal');
+      if (modal) modal.classList.remove('open');
+    };
+
+    window.handleDocUpload = (e) => {
+      e.preventDefault();
+      const type = document.getElementById('uploadDocType').value;
+      const auth = document.getElementById('uploadDocAuth').value || 'State Authority';
+      const newDoc = {
+        id: 'doc_' + Date.now(),
+        title: type,
+        type: 'User Upload',
+        date: new Date().toISOString().split('T')[0],
+        status: 'verified',
+        authority: auth,
+        icon: type.includes('Marksheet') ? '🎓' : type.includes('Aadhaar') ? '💳' : '📄',
+        size: '1.1 MB'
+      };
+      saveWalletDocument(newDoc);
+      closeUploadDocModal();
+      showToast(`"${type}" uploaded to Document Wallet! 🎉`, 'success', 3500);
+      renderWalletDocs();
+    };
+
+    window.previewDocument = (name) => {
+      showToast(`Opening preview for ${name} (DigiLocker Certified) 📜`, 'info', 2500);
+    };
+
+    // Education Loan Calculator
+    window.updateLoanCalculator = () => {
+      const amount = Number(document.getElementById('loanAmountRange').value);
+      const tenure = Number(document.getElementById('loanTenureRange').value);
+      const rate = Number(document.getElementById('loanRateRange').value);
+
+      document.getElementById('loanAmountVal').textContent = '₹' + amount.toLocaleString('en-IN');
+      document.getElementById('loanTenureVal').textContent = `${tenure} Year${tenure > 1 ? 's' : ''}`;
+      document.getElementById('loanRateVal').textContent = `${rate.toFixed(2)}%`;
+
+      const calc = calculateLoanEMI(amount, rate, tenure);
+      document.getElementById('calcEmiDisplay').textContent = '₹' + calc.emi.toLocaleString('en-IN');
+      document.getElementById('calcTotalPayment').textContent = `Total Payment: ₹${calc.totalPayment.toLocaleString('en-IN')} (Interest: ₹${calc.totalInterest.toLocaleString('en-IN')})`;
+    };
+
+    window.openLoanApplyModal = (schemeName) => {
+      if (schemeName) document.getElementById('loanSchemeName').value = schemeName;
+      const currentAmt = document.getElementById('loanAmountRange') ? document.getElementById('loanAmountRange').value : 500000;
+      document.getElementById('loanApplyAmount').value = currentAmt;
+      const modal = document.getElementById('loanApplyModal');
+      if (modal) modal.classList.add('open');
+    };
+
+    window.closeLoanApplyModal = () => {
+      const modal = document.getElementById('loanApplyModal');
+      if (modal) modal.classList.remove('open');
+    };
+
+    window.handleLoanApply = (e) => {
+      e.preventDefault();
+      const scheme = document.getElementById('loanSchemeName').value;
+      const amt = document.getElementById('loanApplyAmount').value;
+      closeLoanApplyModal();
+      showToast(`Pre-approval request for ₹${Number(amt).toLocaleString('en-IN')} submitted under ${scheme}! Reference: #LN-2026-${Math.floor(1000 + Math.random() * 9000)} 🎉`, 'success', 5000);
+    };
+
+    // Favorites Tab Renderer
+    window.renderFavoritesTab = () => {
+      const grid = document.getElementById('favoritesListGrid');
+      const badge = document.getElementById('sidebarFavBadge');
+      const statSaved = document.getElementById('statSaved');
+      const favIds = getFavoriteScholarships();
+
+      if (badge) badge.textContent = favIds.length;
+      if (statSaved) statSaved.textContent = favIds.length;
+
+      if (!grid) return;
+      const favScholarships = AppState.scholarships.filter(s => favIds.includes(s.id));
+
+      if (favScholarships.length === 0) {
+        grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1;">
+        <div class="empty-icon">🤍</div>
+        <h3>No Favorites Saved Yet</h3>
+        <p>Click the heart icon on any scholarship card to save it here for quick access.</p>
+        <a href="scholarships.html" class="btn btn-primary">Browse Scholarships</a>
+      </div>
+    `;
+        return;
+      }
+
+      grid.innerHTML = favScholarships.map(s => createScholarshipCard(s)).join('');
+      initScrollAnimations();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = AppState.mockUser;
+      const userApps = getUserApplications();
+      const maxLimit = window.MAX_SCHOLARSHIP_APPLICATIONS || 5;
+
+      // Update UI with user info
+      const initial = user.name.charAt(0).toUpperCase();
+      document.getElementById('dashAvatar').textContent = initial;
+      document.getElementById('dashName').textContent = user.name;
+      document.getElementById('dashEmail').textContent = user.email;
+
+      // Greeting
+      const hour = new Date().getHours();
+      const greet = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
+      document.getElementById('dashGreeting').textContent = `${greet}, ${user.name.split(' ')[0]}! 👋`;
+
+      // Dynamic Stats
+      const approvedCount = userApps.filter(a => a.status === 'approved').length;
+      const reviewCount = userApps.filter(a => a.status === 'under_review' || a.status === 'pending').length;
+
+      document.getElementById('statApplied').textContent = `${userApps.length} / ${maxLimit}`;
+      document.getElementById('statApproved').textContent = approvedCount;
+      document.getElementById('statReview').textContent = reviewCount;
+
+      // Favorites count in stats
+      const favCount = getFavoriteScholarships().length;
+      document.getElementById('statSaved').textContent = favCount;
+      const favBadge = document.getElementById('sidebarFavBadge');
+      if (favBadge) favBadge.textContent = favCount;
+
+      // Quota bar & badge
+      const quotaPct = Math.min(100, Math.round((userApps.length / maxLimit) * 100));
+      const remainingSlots = Math.max(0, maxLimit - userApps.length);
+
+      document.getElementById('dashQuotaBadge').textContent = `${userApps.length}/${maxLimit} Applied`;
+      document.getElementById('dashQuotaBadge').className = userApps.length >= maxLimit ? 'badge badge-red' : 'badge badge-gold';
+
+      document.getElementById('quotaProgressCount').textContent = `${userApps.length} of ${maxLimit} Used`;
+      document.getElementById('quotaProgressBar').style.width = `${quotaPct}%`;
+
+      const slotsStatus = document.getElementById('quotaSlotsStatus');
+      const applyMoreWrap = document.getElementById('applyMoreBtnWrap');
+
+      if (userApps.length >= maxLimit) {
+        slotsStatus.innerHTML = '<span style="color:#ef4444;font-weight:700;">⚠️ Application limit reached (5/5). No more slots available.</span>';
+        applyMoreWrap.innerHTML = '<button class="btn btn-outline btn-sm" style="opacity:0.75;" onclick="showToast(\'Application limit reached: You can apply for up to 5 scholarships only (5/5 applied).\',\'warning\',4000);" title="Limit reached">Limit Reached (5/5)</button>';
+        const notice = document.getElementById('recommendedQuotaNotice');
+        if (notice) notice.style.display = 'block';
+      } else {
+        slotsStatus.innerHTML = `<strong>${remainingSlots} slot${remainingSlots === 1 ? '' : 's'}</strong> remaining for application`;
+        applyMoreWrap.innerHTML = '<a href="scholarships.html" class="btn btn-outline btn-sm">+ Apply More</a>';
+      }
+
+      // Applications
+      const statusMap = {
+        pending: { color: '#EAB308', label: 'Pending', dot: 'dot-pending' },
+        under_review: { color: '#3B82F6', label: 'Under Review', dot: 'dot-review' },
+        approved: { color: '#22C55E', label: 'Approved ✓', dot: 'dot-approved' },
+        rejected: { color: '#EF4444', label: 'Rejected', dot: 'dot-rejected' }
+      };
+
+      const appHTML = userApps.map(app => {
+        const sch = AppState.scholarships.find(s => s.id === app.scholarshipId) || {};
+        const st = statusMap[app.status] || statusMap.pending;
+        return `
     <div class="app-card fade-in">
       <div class="app-emoji">${sch.orgEmoji || '🏅'}</div>
       <div style="flex:1;">
@@ -297,7 +1584,8 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="app-status-dot ${st.dot}"></div>
           <span style="color:${st.color};font-weight:600;">${st.label}</span>
           <span>•</span>
-          <span>Applied: ${app.appliedDate}</span>
+          <span>Applied: ${app.appliedDate || '2026-09-01'}</span>
+          ${app.refId ? `<span>• Ref: <strong style="color:var(--primary);">${app.refId}</strong></span>` : ''}
         </div>
       </div>
       <div class="app-actions">
@@ -305,38 +1593,38 @@ document.addEventListener('DOMContentLoaded', () => {
         <button class="btn btn-ghost btn-sm" onclick="viewScholarship('${app.scholarshipId}')">View</button>
       </div>
     </div>`;
-  }).join('');
-  document.getElementById('applicationsList').innerHTML = appHTML;
+      }).join('');
+      document.getElementById('applicationsList').innerHTML = appHTML || '<p style="color:var(--text-muted);font-size:0.9rem;">No applications submitted yet.</p>';
 
-  // Recommended
-  const notApplied = AppState.scholarships.filter(s =>
-    !user.applications.find(a => a.scholarshipId === s.id)
-  ).slice(0, 4);
-  document.getElementById('recommendedGrid').innerHTML = notApplied.map(s => createScholarshipCard(s)).join('');
+      // Recommended (excluding already applied)
+      const notApplied = AppState.scholarships.filter(s =>
+        !userApps.some(a => a.scholarshipId === s.id)
+      ).slice(0, 4);
+      document.getElementById('recommendedGrid').innerHTML = notApplied.map(s => createScholarshipCard(s)).join('');
 
-  // Deadlines
-  const sorted = AppState.scholarships.slice().sort((a,b) => new Date(a.deadline) - new Date(b.deadline)).slice(0, 4);
-  document.getElementById('deadlineList').innerHTML = sorted.map(s => {
-    const days = daysLeft(s.deadline);
-    const color = days < 15 ? 'var(--accent)' : days < 30 ? 'var(--gold)' : '#22C55E';
-    return `
+      // Deadlines
+      const sorted = AppState.scholarships.slice().sort((a, b) => new Date(a.deadline) - new Date(b.deadline)).slice(0, 4);
+      document.getElementById('deadlineList').innerHTML = sorted.map(s => {
+        const days = daysLeft(s.deadline);
+        const color = days < 15 ? 'var(--accent)' : days < 30 ? 'var(--gold)' : '#22C55E';
+        return `
     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border-light);">
       <div>
-        <div style="font-size:0.82rem;font-weight:600;">${s.title.substring(0,30)}...</div>
+        <div style="font-size:0.82rem;font-weight:600;">${s.title.substring(0, 30)}...</div>
         <div style="font-size:0.75rem;color:var(--text-muted);">${s.deadlineDisplay}</div>
       </div>
       <span style="font-size:0.75rem;font-weight:700;color:${color};">${days}d</span>
     </div>`;
-  }).join('');
+      }).join('');
 
-  // Notifications
-  const notifs = [
-    { text: 'Your INSPIRE Scholarship application was <strong>Approved!</strong> 🎉', time: '2 hours ago', read: false },
-    { text: 'National Merit Scholarship deadline in <strong>30 days</strong>. Don\'t forget to apply!', time: '1 day ago', read: false },
-    { text: 'Pragati Scholarship status updated to <strong>Under Review</strong>.', time: '3 days ago', read: false },
-    { text: 'New scholarship added: PM CARES Scholarship — <strong>check eligibility</strong>.', time: '1 week ago', read: true },
-  ];
-  document.getElementById('notifList').innerHTML = notifs.map(n => `
+      // Notifications
+      const notifs = [
+        { text: 'Your INSPIRE Scholarship application was <strong>Approved!</strong> 🎉', time: '2 hours ago', read: false },
+        { text: 'National Merit Scholarship deadline in <strong>30 days</strong>. Don\'t forget to apply!', time: '1 day ago', read: false },
+        { text: 'Pragati Scholarship status updated to <strong>Under Review</strong>.', time: '3 days ago', read: false },
+        { text: 'New scholarship added: PM CARES Scholarship — <strong>check eligibility</strong>.', time: '1 week ago', read: true },
+      ];
+      document.getElementById('notifList').innerHTML = notifs.map(n => `
     <div class="notif-item">
       <div class="notif-dot ${n.read ? 'read' : ''}"></div>
       <div>
@@ -345,8 +1633,17 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>`).join('');
 
-  initScrollAnimations();
-});
-</script>
+      // Pre-render tabs
+      renderWalletDocs();
+      updateLoanCalculator();
+      renderFavoritesTab();
+      renderStreamTab();
+      renderAssessmentTab();
+      renderAwardsTab();
+      renderGrievanceTab();
+      initScrollAnimations();
+    });
+  </script>
 </body>
+
 </html>

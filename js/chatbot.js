@@ -32,6 +32,10 @@
       reply: "Upcoming deadlines:\n• National Merit: Oct 31, 2026\n• Post-Matric SC/ST: Sep 30, 2026\n• INSPIRE: Dec 15, 2026\n• AICTE Pragati: Nov 15, 2026\nApply early to avoid last-minute server rush!"
     },
     {
+      keywords: ['how many', 'limit', 'maximum', 'upto 5', 'up to 5', '5 scholarships', 'quota', 'how much can i apply', 'apply limit'],
+      reply: "🎯 On ScholarBridge, you can apply for **up to 5 scholarships only** per academic cycle. This policy ensures high quality submissions and fair opportunity. You can monitor your live quota and track applied scholarships on your [Dashboard](dashboard.html)!"
+    },
+    {
       keywords: ['ticket', 'track', 'status', 'sch-'],
       isTicketCheck: true
     },
@@ -77,7 +81,12 @@
 
     // Keyword match
     for (const item of BOT_RESPONSES) {
-      if (item.keywords && item.keywords.some(k => clean.includes(k))) {
+      if (item.keywords && item.keywords.some(k => {
+        if (k.length <= 3) {
+          return new RegExp(`\\b${k}\\b`, 'i').test(clean);
+        }
+        return clean.includes(k);
+      })) {
         return item.reply;
       }
     }
@@ -87,8 +96,8 @@
 
   function renderMarkdownLinks(text) {
     return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:var(--primary);text-decoration:underline;font-weight:600;">$1</a>')
-               .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-               .replace(/\n/g, '<br/>');
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br/>');
   }
 
   function initChatbot() {

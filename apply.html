@@ -164,6 +164,20 @@
       <p id="applyPageOrg" style="color:var(--text-muted);">Fill all sections accurately. Incorrect information may lead to disqualification.</p>
     </div>
 
+    <!-- Limit / Duplicate Warning Banner -->
+    <div id="applyLimitBanner" style="display:none;margin-bottom:20px;">
+      <div class="alert alert-warning" id="applyLimitAlert" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-radius:var(--radius-md);border-left:5px solid var(--accent);">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span style="font-size:2rem;" id="applyBannerIcon">⚠️</span>
+          <div>
+            <strong id="applyBannerTitle" style="font-size:1.05rem;display:block;margin-bottom:2px;">Application Limit Reached (5/5)</strong>
+            <span id="applyBannerText" style="font-size:0.86rem;color:var(--text-secondary);">You can apply for up to 5 scholarships only. You have already utilized all 5 available application slots.</span>
+          </div>
+        </div>
+        <a href="dashboard.html" class="btn btn-primary btn-sm" style="white-space:nowrap;">View My Dashboard</a>
+      </div>
+    </div>
+
     <!-- Steps -->
     <div class="apply-steps" id="applySteps">
       <div class="apply-step active" data-step="1">
@@ -469,6 +483,24 @@
           </div>
         </div>
 
+        <!-- Application Quota Card -->
+        <div class="card" style="padding:20px;margin-top:16px;border-left:4px solid var(--primary);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <h5 style="font-size:0.88rem;margin:0;">🎯 Application Quota</h5>
+            <span class="badge badge-orange" id="quotaBadge">3 / 5 Used</span>
+          </div>
+          <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:10px;">
+            ScholarBridge policy allows each student to apply for <strong>up to 5 scholarships only</strong>.
+          </p>
+          <div class="progress-bar" style="height:8px;background:var(--surface-3);border-radius:10px;overflow:hidden;margin-bottom:6px;">
+            <div class="progress-fill" id="quotaProgressFill" style="width:60%;background:var(--gradient);"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);">
+            <span id="quotaRemainingText">2 slots remaining</span>
+            <span>Max: 5</span>
+          </div>
+        </div>
+
         <div class="card" style="padding:20px;margin-top:16px;">
           <h5 style="margin-bottom:12px;font-size:0.88rem;">📌 Application Checklist</h5>
           <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem;" id="checklist">
@@ -547,9 +579,32 @@
 let currentStep = 1;
 const totalSteps = 4;
 
-// Load scholarship info
+// Load scholarship info & check quota
+let activeSchId = 'sch001';
+
+function updateQuotaSidebar() {
+  const apps = getUserApplications();
+  const count = apps.length;
+  const max = window.MAX_SCHOLARSHIP_APPLICATIONS || 5;
+  const pct = Math.min(100, Math.round((count / max) * 100));
+  const remaining = Math.max(0, max - count);
+
+  const badge = document.getElementById('quotaBadge');
+  if (badge) {
+    badge.textContent = `${count} / ${max} Used`;
+    badge.className = count >= max ? 'badge badge-red' : count >= 3 ? 'badge badge-gold' : 'badge badge-green';
+  }
+
+  const fill = document.getElementById('quotaProgressFill');
+  if (fill) fill.style.width = `${pct}%`;
+
+  const rem = document.getElementById('quotaRemainingText');
+  if (rem) rem.textContent = `${remaining} slot${remaining === 1 ? '' : 's'} remaining`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const schId = localStorage.getItem('applyScholarshipId') || 'sch001';
+  activeSchId = schId;
   const sch = AppState.scholarships.find(s => s.id === schId) || AppState.scholarships[0];
 
   document.getElementById('applyPageTitle').textContent = `Apply: ${sch.title}`;
@@ -562,6 +617,38 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('summaryDeadline').textContent = sch.deadlineDisplay;
   document.getElementById('summarySeats').textContent = `${sch.seats - sch.applied} remaining`;
   document.getElementById('summaryElig').textContent = sch.eligibility;
+
+  // Update quota display in sidebar
+  updateQuotaSidebar();
+
+  // Validate if student can apply
+  const check = canApplyForScholarship(schId);
+  if (!check.allowed) {
+    const banner = document.getElementById('applyLimitBanner');
+    const title = document.getElementById('applyBannerTitle');
+    const text = document.getElementById('applyBannerText');
+    const icon = document.getElementById('applyBannerIcon');
+    const submitBtn = document.getElementById('submitApplicationBtn');
+
+    if (banner) banner.style.display = 'block';
+
+    if (check.reason === 'already_applied') {
+      if (icon) icon.textContent = 'ℹ️';
+      if (title) title.textContent = 'Already Applied for this Scholarship';
+      if (text) text.textContent = `You have already submitted an application for "${sch.title}". You can track its live progress on your Dashboard.`;
+    } else if (check.reason === 'limit_reached') {
+      if (icon) icon.textContent = '⚠️';
+      if (title) title.textContent = 'Application Limit Reached (5 of 5 Used)';
+      if (text) text.textContent = 'ScholarBridge policy allows applying for up to 5 scholarships only. You have already utilized all 5 available application slots.';
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.5';
+      submitBtn.style.cursor = 'not-allowed';
+      submitBtn.title = check.message;
+    }
+  }
 });
 
 function goToStep(step) {
@@ -648,6 +735,12 @@ function populateReview() {
 }
 
 function submitApplication() {
+  const check = canApplyForScholarship(activeSchId);
+  if (!check.allowed) {
+    showToast(check.message, 'warning', 5000);
+    return;
+  }
+
   if (!document.getElementById('declarationCheck').checked) {
     showToast('Please agree to the declaration before submitting', 'warning');
     return;
@@ -661,6 +754,17 @@ function submitApplication() {
     const refId = 'APP-2026-' + Math.floor(1000 + Math.random() * 9000);
     document.getElementById('appRefId').textContent = '#' + refId;
 
+    // Save application to state & localStorage
+    const newApp = {
+      scholarshipId: activeSchId,
+      refId: '#' + refId,
+      status: 'pending',
+      appliedDate: new Date().toISOString().split('T')[0],
+      statusLabel: 'Pending'
+    };
+    saveUserApplication(newApp);
+    updateQuotaSidebar();
+
     document.querySelector('#step4 .form-body > *:not(#applySuccess)') &&
       document.querySelectorAll('#step4 .form-body > *:not(#applySuccess)').forEach(el => el.style.display = 'none');
 
@@ -672,8 +776,9 @@ function submitApplication() {
     document.getElementById('applySuccess').style.display = 'block';
 
     document.getElementById('chk4').querySelector('span').textContent = '✅';
-    showToast('Application submitted successfully! 🎉', 'success');
-  }, 2000);
+    const totalNow = getUserApplications().length;
+    showToast(`Application submitted successfully! 🎉 (${totalNow}/5 scholarships applied)`, 'success', 5000);
+  }, 1800);
 }
 
 function openReceiptModal() {

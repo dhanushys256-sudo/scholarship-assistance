@@ -660,11 +660,12 @@
     }
 
     function renderStudents() {
+      const demoAppsCount = (typeof getUserApplications === 'function') ? getUserApplications().length : 3;
       const students = Array.from({ length: 8 }, (_, i) => ({
         name: ['Ravi Kumar', 'Priya Sharma', 'Anjali Nair', 'Rohit Das', 'Meena Reddy', 'Suresh Patel', 'Kavita Joshi', 'Arjun Singh'][i],
         email: ['ravi', 'priya', 'anjali', 'rohit', 'meena', 'suresh', 'kavita', 'arjun'][i] + '@example.com',
         cat: ['OBC', 'General', 'SC', 'General', 'ST', 'OBC', 'EWS', 'SC'][i],
-        apps: [3, 1, 2, 1, 1, 1, 1, 2][i],
+        apps: [demoAppsCount, 1, 2, 1, 1, 1, 1, 2][i],
         joined: '2026-0' + (i + 1) + '-01'
       }));
       document.getElementById('studentsBody').innerHTML = students.map(s => `
@@ -677,7 +678,7 @@
       </td>
       <td style="font-size:0.82rem;color:var(--text-muted);">${s.email}</td>
       <td><span class="badge badge-blue">${s.cat}</span></td>
-      <td style="text-align:center;font-weight:700;">${s.apps}</td>
+      <td style="text-align:center;"><span class="badge ${s.apps >= 5 ? 'badge-red' : 'badge-gold'}" style="font-size:0.75rem;">${s.apps} / 5</span></td>
       <td style="font-size:0.82rem;color:var(--text-muted);">${s.joined}</td>
       <td><button class="btn btn-ghost btn-sm" onclick="showToast('View profile — coming soon','info')">👁️ View</button></td>
     </tr>`).join('');
